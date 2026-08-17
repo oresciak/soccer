@@ -368,6 +368,116 @@
         margin: 0 auto 20px;
       }
 
+      .main-menu {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 18px;
+        width: min(1100px, 90vw);
+        margin: 0 auto;
+      }
+
+      .career-launcher {
+        flex: 1.35;
+        min-height: 600px;
+        background: rgba(15, 17, 22, 0.9);
+        border: 2px solid rgba(255,255,255,0.12);
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        color: #fff;
+        text-transform: uppercase;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+      }
+
+      .career-launcher.is-active {
+        outline: 2px solid rgba(183, 119, 214, 0.9);
+        outline-offset: -4px;
+      }
+
+      .career-image-slot {
+        width: 78%;
+        height: 280px;
+        border: 2px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.5);
+        font-size: 1rem;
+        letter-spacing: 0.12em;
+        margin-bottom: 28px;
+      }
+
+      .career-launcher .main-button-title {
+        font-size: clamp(2rem, 2.4vw, 3rem);
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-align: center;
+        line-height: 1.1;
+      }
+
+      .menu-side {
+        flex: 0.9;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .menu-panel {
+        height: 180px;
+        background: rgba(15, 17, 22, 0.9);
+        border: 2px solid rgba(255,255,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .menu-panel.is-active {
+        outline: 2px solid rgba(183, 119, 214, 0.9);
+        outline-offset: -4px;
+      }
+
+      .menu-panel-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .menu-thumb {
+        width: 72%;
+        height: 82px;
+        border: 2px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.5);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+      }
+
+      .menu-panel-label {
+        font-size: 1.2rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+
       button {
         appearance: none;
         border: none;
@@ -472,8 +582,33 @@
       </div>
 
       <div class="button-row" id="startButtons">
-        <button class="start" id="startSaveBtn">Start save</button>
-        <button class="secondary" id="resetBtn">Reset data</button>
+        <div class="main-menu">
+          <button class="career-launcher is-active" id="startSaveBtn" type="button">
+            <span class="career-image-slot">IMAGE SLOT</span>
+            <span class="main-button-title">NEW CAREER</span>
+          </button>
+
+          <div class="menu-side" aria-label="extra menu panels">
+            <button class="menu-panel" type="button" data-menu-index="1">
+              <span class="menu-panel-content">
+                <span class="menu-thumb">IMAGE SLOT</span>
+                <span class="menu-panel-label">button1</span>
+              </span>
+            </button>
+            <button class="menu-panel" type="button" data-menu-index="2">
+              <span class="menu-panel-content">
+                <span class="menu-thumb">IMAGE SLOT</span>
+                <span class="menu-panel-label">button2</span>
+              </span>
+            </button>
+            <button class="menu-panel" type="button" data-menu-index="3">
+              <span class="menu-panel-content">
+                <span class="menu-thumb">IMAGE SLOT</span>
+                <span class="menu-panel-label">button3</span>
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="save-status hidden" id="saveStatus">Waiting to start...</div>
@@ -497,7 +632,6 @@
 
       const saveStatus = document.getElementById('saveStatus');
       const startSaveBtn = document.getElementById('startSaveBtn');
-      const resetBtn = document.getElementById('resetBtn');
       const topDate = document.getElementById('topDate');
       const dateDay = document.getElementById('dateDay');
       const dateTime = document.getElementById('dateTime');
@@ -512,6 +646,12 @@
       const selectClubBtn = document.getElementById('selectClubBtn');
       const startButtons = document.getElementById('startButtons');
       const gameScreen = document.getElementById('gameScreen');
+      const mainMenuButtons = [
+        document.getElementById('startSaveBtn'),
+        ...document.querySelectorAll('.menu-panel')
+      ];
+
+      let mainMenuSelectionIndex = 0;
 
       let clubSelectionState = {
         countryIndex: 0,
@@ -519,6 +659,30 @@
         clubIndex: 0,
         activePanel: 'country'
       };
+
+      function updateMainMenuSelection() {
+        mainMenuButtons.forEach((button, index) => {
+          const isActive = index === mainMenuSelectionIndex;
+          button.classList.toggle('is-active', isActive);
+        });
+      }
+
+      function moveMainMenuSelection(direction) {
+        mainMenuSelectionIndex = (mainMenuSelectionIndex + direction + mainMenuButtons.length) % mainMenuButtons.length;
+        updateMainMenuSelection();
+      }
+
+      function activateMainMenuSelection() {
+        const selectedButton = mainMenuButtons[mainMenuSelectionIndex];
+        if (!selectedButton) return;
+
+        if (selectedButton.id === 'startSaveBtn') {
+          startSaveProcedure();
+          return;
+        }
+
+        selectedButton.click();
+      }
 
       function updateDateHeader() {
         dateDay.textContent = String(gameState.day);
@@ -656,13 +820,14 @@
         const clubs = getClubOptionsForCountryAndLeague(currentCountry.id, currentLeague ? currentLeague.id : null);
 
         if (panel === 'country') {
+          if (countries.length <= 1) return;
           clubSelectionState.countryIndex = (clubSelectionState.countryIndex + direction + countries.length) % countries.length;
           clubSelectionState.leagueIndex = 0;
           clubSelectionState.clubIndex = 0;
         }
 
         if (panel === 'league') {
-          if (!leagues.length) return;
+          if (!leagues.length || leagues.length <= 1) return;
           clubSelectionState.leagueIndex = (clubSelectionState.leagueIndex + direction + leagues.length) % leagues.length;
           clubSelectionState.clubIndex = 0;
         }
@@ -673,6 +838,20 @@
         }
 
         refreshSelectionState();
+      }
+
+      function refreshArrowButtonState() {
+        const countries = getCountryOptions();
+        const country = countries[clubSelectionState.countryIndex] || countries[0];
+        const leagues = getLeagueOptionsForCountry(country ? country.id : null);
+
+        document.querySelectorAll('.arrow-btn').forEach((button) => {
+          const panel = button.dataset.panel;
+          const isDisabled = (panel === 'country' && countries.length <= 1) || (panel === 'league' && leagues.length <= 1);
+          button.disabled = isDisabled;
+          button.style.opacity = isDisabled ? '0.35' : '1';
+          button.style.pointerEvents = isDisabled ? 'none' : 'auto';
+        });
       }
 
       function selectCurrentClub() {
@@ -740,20 +919,9 @@
         updateDateHeader();
       }
 
-      function resetGameData() {
-        localStorage.removeItem(gameState.saveName);
-        gameState.clubId = null;
-        gameState.started = false;
-        topDate.classList.add('hidden');
-        saveStatus.textContent = 'Data reset. Waiting to start...';
-        saveStatus.classList.remove('hidden');
-        gameScreen.classList.add('hidden');
-        startButtons.classList.remove('hidden');
-        refreshSelectionState();
-      }
-
       document.querySelectorAll('.arrow-btn').forEach((button) => {
         button.addEventListener('click', () => {
+          if (button.disabled) return;
           const panel = button.dataset.panel;
           const direction = Number(button.dataset.dir || 1);
           clubSelectionState.activePanel = panel;
@@ -774,59 +942,114 @@
       });
 
       startSaveBtn.addEventListener('click', startSaveProcedure);
-      resetBtn.addEventListener('click', resetGameData);
+
+      mainMenuButtons.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          mainMenuSelectionIndex = index;
+          updateMainMenuSelection();
+          if (button.id === 'startSaveBtn') {
+            startSaveProcedure();
+          }
+        });
+      });
 
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-          event.preventDefault();
-          if (clubSelectionState.activePanel === 'select') {
-            clubSelectionState.activePanel = 'league';
+        if (startButtons && !startButtons.classList.contains('hidden')) {
+          if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            moveMainMenuSelection(-1);
+            return;
+          }
+
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            moveMainMenuSelection(1);
+            return;
+          }
+
+          if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            moveMainMenuSelection(-1);
+            return;
+          }
+
+          if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            moveMainMenuSelection(1);
+            return;
+          }
+
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            activateMainMenuSelection();
+            return;
+          }
+        }
+
+        if (!gameScreen.classList.contains('hidden')) {
+          if (event.key === 'ArrowLeft') {
+            if (clubSelectionState.activePanel === 'select') {
+              return;
+            }
+            const currentCountry = getCountryOptions()[clubSelectionState.countryIndex] || getCountryOptions()[0];
+            const currentLeagueOptions = getLeagueOptionsForCountry(currentCountry ? currentCountry.id : null);
+            if (clubSelectionState.activePanel === 'league' && currentLeagueOptions.length <= 1) {
+              return;
+            }
+            if (clubSelectionState.activePanel === 'country' && getCountryOptions().length <= 1) {
+              return;
+            }
+            event.preventDefault();
+            moveSelection(clubSelectionState.activePanel, -1);
             updateActiveSelectionVisual();
             return;
           }
-          moveSelection(clubSelectionState.activePanel, -1);
-          updateActiveSelectionVisual();
-        }
 
-        if (event.key === 'ArrowRight') {
-          event.preventDefault();
-          if (clubSelectionState.activePanel === 'select') {
-            clubSelectionState.activePanel = 'country';
+          if (event.key === 'ArrowRight') {
+            if (clubSelectionState.activePanel === 'select') {
+              return;
+            }
+            const currentCountry = getCountryOptions()[clubSelectionState.countryIndex] || getCountryOptions()[0];
+            const currentLeagueOptions = getLeagueOptionsForCountry(currentCountry ? currentCountry.id : null);
+            if (clubSelectionState.activePanel === 'league' && currentLeagueOptions.length <= 1) {
+              return;
+            }
+            if (clubSelectionState.activePanel === 'country' && getCountryOptions().length <= 1) {
+              return;
+            }
+            event.preventDefault();
+            moveSelection(clubSelectionState.activePanel, 1);
             updateActiveSelectionVisual();
             return;
           }
-          moveSelection(clubSelectionState.activePanel, 1);
-          updateActiveSelectionVisual();
-        }
 
-        if (event.key === 'ArrowUp') {
-          const order = ['country', 'club', 'league', 'select'];
-          const index = order.indexOf(clubSelectionState.activePanel);
-          clubSelectionState.activePanel = order[(index - 1 + order.length) % order.length];
-          updateActiveSelectionVisual();
-        }
+          if (event.key === 'ArrowUp') {
+            const order = ['country', 'club', 'league', 'select'];
+            const index = order.indexOf(clubSelectionState.activePanel);
+            clubSelectionState.activePanel = order[(index - 1 + order.length) % order.length];
+            updateActiveSelectionVisual();
+          }
 
-        if (event.key === 'ArrowDown') {
-          const order = ['country', 'club', 'league', 'select'];
-          const index = order.indexOf(clubSelectionState.activePanel);
-          clubSelectionState.activePanel = order[(index + 1) % order.length];
-          updateActiveSelectionVisual();
-        }
+          if (event.key === 'ArrowDown') {
+            const order = ['country', 'club', 'league', 'select'];
+            const index = order.indexOf(clubSelectionState.activePanel);
+            clubSelectionState.activePanel = order[(index + 1) % order.length];
+            updateActiveSelectionVisual();
+          }
 
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          if (clubSelectionState.activePanel === 'select') {
+          if (event.key === 'Enter') {
+            event.preventDefault();
             selectCurrentClub();
-            return;
           }
-          selectCurrentClub();
         }
       });
 
       updateDateHeader();
       topDate.classList.add('hidden');
       refreshSelectionState();
+      refreshArrowButtonState();
       updateActiveSelectionVisual();
+      updateMainMenuSelection();
 
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
