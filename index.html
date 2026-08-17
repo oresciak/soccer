@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Soccer Save</title>
+    <title>Football Manager</title>
     <style>
       :root {
-        --bg: rgba(7, 15, 24, 0.7);
-        --panel: rgba(9, 17, 28, 0.85);
+        --panel: rgba(9, 17, 28, 0.86);
         --panel-border: rgba(255,255,255,0.12);
         --accent: #2dd4bf;
         --accent-2: #facc15;
@@ -38,7 +37,7 @@
         content: "";
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.38);
+        background: rgba(0, 0, 0, 0.4);
         pointer-events: none;
       }
 
@@ -75,7 +74,7 @@
       }
 
       .screen {
-        width: min(900px, 90vw);
+        width: min(1000px, 92vw);
         background: var(--panel);
         border: 1px solid var(--panel-border);
         border-radius: 18px;
@@ -84,23 +83,28 @@
       }
 
       .title {
-        font-size: 2.3rem;
+        text-align: center;
+        font-size: clamp(2rem, 3vw, 3rem);
         font-weight: 700;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         letter-spacing: 0.04em;
       }
 
       .subtitle {
+        text-align: center;
         color: var(--muted);
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         font-size: 1rem;
       }
 
       .button-row {
         display: flex;
+        justify-content: center;
+        align-items: center;
         gap: 12px;
         flex-wrap: wrap;
-        margin-bottom: 20px;
+        width: 100%;
+        margin: 0 auto 20px;
       }
 
       button {
@@ -109,6 +113,7 @@
         cursor: pointer;
         border-radius: 12px;
         padding: 12px 18px;
+        min-width: 180px;
         font-size: 1rem;
         font-weight: 700;
         transition: transform 0.15s ease, opacity 0.15s ease;
@@ -130,6 +135,7 @@
       }
 
       .save-status {
+        text-align: center;
         color: var(--accent-2);
         min-height: 24px;
         font-weight: 600;
@@ -174,14 +180,14 @@
     <div class="app">
       <div class="screen" id="gameScreen">
         <div class="title">Football Manager</div>
-        <div class="subtitle">Nowa gra / zapis / baza danych placeholder</div>
+        <div class="subtitle">New save / database placeholder / club selection</div>
 
         <div class="button-row">
-          <button class="primary" id="startSaveBtn">Start zapisu</button>
-          <button class="secondary" id="resetBtn">Reset danych</button>
+          <button class="primary" id="startSaveBtn">Start save</button>
+          <button class="secondary" id="resetBtn">Reset data</button>
         </div>
 
-        <div class="save-status" id="saveStatus">Oczekiwanie na start...</div>
+        <div class="save-status" id="saveStatus">Waiting to start...</div>
 
         <div id="clubSelection" class="club-list hidden"></div>
       </div>
@@ -254,20 +260,21 @@
           card.innerHTML = `
             <h3>${club.name}</h3>
             <div class="club-meta">
-              <div>Liga: ${db.leagues.find(l => l.id === club.leagueId)?.name || 'Brak ligi'}</div>
-              <div>Państwo: ${db.countries.find(c => c.id === club.countryId)?.name || 'Brak państwa'}</div>
-              <div>Prestiz: ${club.prestige}</div>
-              <div>Budżet: €${(club.budget / 1000000).toFixed(1)}M</div>
+              <div>League: ${db.leagues.find(l => l.id === club.leagueId)?.name || 'Missing league'}</div>
+              <div>Country: ${db.countries.find(c => c.id === club.countryId)?.name || 'Missing country'}</div>
+              <div>Prestige: ${club.prestige}</div>
+              <div>Budget: €${(club.budget / 1000000).toFixed(1)}M</div>
+              <div>Players: ${club.squadSize || 22}</div>
             </div>
           `;
 
           card.addEventListener('click', () => {
             gameState.clubId = club.id;
-            saveStatus.textContent = `Wybrany klub: ${club.name} | zapis tworzony...`;
+            saveStatus.textContent = `Selected club: ${club.name} | save in progress...`;
             const save = createSave();
-            console.log('Zapis utworzony:', save);
+            console.log('Save created:', save);
             clubSelection.classList.add('hidden');
-            startSaveBtn.textContent = `Wybrany klub: ${club.name}`;
+            startSaveBtn.textContent = `Club: ${club.name}`;
           });
 
           clubSelection.appendChild(card);
@@ -276,7 +283,7 @@
 
       function startSaveProcedure() {
         gameState.started = true;
-        saveStatus.textContent = 'Tworzenie zapisu gry...';
+        saveStatus.textContent = 'Creating game save...';
         clubSelection.classList.remove('hidden');
         renderClubSelection();
       }
@@ -286,8 +293,8 @@
         gameState.clubId = null;
         gameState.started = false;
         clubSelection.classList.add('hidden');
-        saveStatus.textContent = 'Dane zresetowane. Oczekiwanie na start...';
-        startSaveBtn.textContent = 'Start zapisu';
+        saveStatus.textContent = 'Data reset. Waiting to start...';
+        startSaveBtn.textContent = 'Start save';
       }
 
       startSaveBtn.addEventListener('click', startSaveProcedure);

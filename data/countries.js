@@ -2,9 +2,9 @@ window.gameDatabase = window.gameDatabase || {};
 window.gameDatabase.countries = [
   {
     id: 'poland',
-    name: 'Polska',
+    name: 'Poland',
     flag: '🇵🇱',
-    population: 37700,
+    population: 37700000,
     prestige: 68,
     economy: 62,
     stability: 74,
@@ -14,14 +14,14 @@ window.gameDatabase.countries = [
     youthDevelopment: 79,
     financialPower: 63,
     currency: 'PLN',
-    region: 'Europa Środkowa',
-    notes: 'Silny rynek piłkarski z dużą kulturą futbolu.'
+    region: 'Central Europe',
+    notes: 'Strong football culture with a solid domestic structure.'
   },
   {
     id: 'england',
-    name: 'Anglia',
+    name: 'England',
     flag: '🏴',
-    population: 56000,
+    population: 56000000,
     prestige: 95,
     economy: 90,
     stability: 86,
@@ -31,14 +31,14 @@ window.gameDatabase.countries = [
     youthDevelopment: 87,
     financialPower: 96,
     currency: 'GBP',
-    region: 'Europa Zachodnia',
-    notes: 'Najbardziej prestiżowe i finansowo mocne ligi świata.'
+    region: 'Western Europe',
+    notes: 'The most prestigious and financially powerful league environment.'
   },
   {
     id: 'italy',
-    name: 'Włochy',
+    name: 'Italy',
     flag: '🇮🇹',
-    population: 58800,
+    population: 58800000,
     prestige: 86,
     economy: 81,
     stability: 78,
@@ -48,7 +48,7 @@ window.gameDatabase.countries = [
     youthDevelopment: 85,
     financialPower: 80,
     currency: 'EUR',
-    region: 'Europa Południowa',
-    notes: 'Liga z wysoką jakością techniczną i tradycją.'
+    region: 'Southern Europe',
+    notes: 'Tactical tradition, strong technical quality and competitive clubs.'
   }
 ];
