@@ -103,7 +103,7 @@
 
       .screen {
         width: 500px;
-        max-width: 90vw;
+        max-width: 92vw;
         background: transparent;
         border: none;
         border-radius: 0;
@@ -133,24 +133,24 @@
 
       .country-section {
         height: 72px;
-        background: #1f2024;
-        border-top: 3px solid rgba(255,255,255,0.16);
-        border-bottom: 3px solid rgba(255,255,255,0.16);
+        background: #1d1f22;
+        border-top: 3px solid rgba(255,255,255,0.15);
+        border-bottom: 3px solid rgba(255,255,255,0.15);
       }
 
       .club-section {
         height: 360px;
-        background: #b57cd4;
-        border-top: 3px solid rgba(255,255,255,0.16);
-        border-bottom: 3px solid rgba(255,255,255,0.16);
-        padding: 14px 0;
+        background: #b777d6;
+        border-top: 3px solid rgba(255,255,255,0.15);
+        border-bottom: 3px solid rgba(255,255,255,0.15);
+        padding: 10px 0;
       }
 
       .league-section {
-        height: 88px;
-        background: #2c2d31;
-        border-top: 3px solid rgba(255,255,255,0.16);
-        border-bottom: 3px solid rgba(255,255,255,0.16);
+        height: 84px;
+        background: #2f3034;
+        border-top: 3px solid rgba(255,255,255,0.15);
+        border-bottom: 3px solid rgba(255,255,255,0.15);
       }
 
       .section-label {
@@ -163,22 +163,25 @@
         justify-content: space-between;
         width: 100%;
         height: 100%;
-        padding: 0 18px;
+        padding: 0 14px;
         box-sizing: border-box;
       }
 
       .arrow-btn {
-        width: 42px;
-        height: 42px;
+        width: 26px;
+        height: 26px;
         border: none;
         border-radius: 0;
-        background: rgba(0,0,0,0.18);
+        background: transparent;
         color: #fff;
-        font-size: 1.8rem;
+        font-size: 1.7rem;
         cursor: pointer;
         flex-shrink: 0;
         line-height: 1;
         padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .value-box {
@@ -187,10 +190,11 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        min-width: 0;
       }
 
       .country-text {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -206,28 +210,36 @@
       }
 
       .club-logo {
-        width: 170px;
-        height: 170px;
+        width: 160px;
+        height: 160px;
         border-radius: 50%;
         background: #f6d300;
         color: #111;
         border: 8px solid #000;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
-        font-size: 4.2rem;
+        font-size: 3.8rem;
         font-weight: 900;
         font-family: Arial Black, Arial, sans-serif;
         line-height: 1;
         position: relative;
         box-shadow: inset 0 0 0 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+      }
+
+      .club-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
       }
 
       .club-logo::after {
         content: "";
         position: absolute;
-        width: 82px;
-        height: 82px;
+        width: 74px;
+        height: 74px;
         border-radius: 50%;
         border: 6px solid rgba(0,0,0,0.9);
         left: 50%;
@@ -237,34 +249,35 @@
       }
 
       .club-name {
-        margin-top: 18px;
-        font-size: 2.4rem;
+        margin-top: 14px;
+        font-size: 2rem;
         font-weight: 900;
         letter-spacing: 0.04em;
         text-transform: uppercase;
         color: #fff;
+        line-height: 1.1;
       }
 
       .club-stars {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        margin-top: 10px;
+        gap: 5px;
+        margin-top: 8px;
         min-height: 24px;
       }
 
       .star {
         color: #ffffff;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
       }
 
       .club-stats {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 22px;
-        margin-top: 16px;
+        gap: 18px;
+        margin-top: 12px;
       }
 
       .stat {
@@ -272,11 +285,11 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-width: 62px;
+        min-width: 56px;
       }
 
       .stat-label {
-        font-size: 0.8rem;
+        font-size: 0.72rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: rgba(255,255,255,0.82);
@@ -284,14 +297,14 @@
       }
 
       .stat-value {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
         font-weight: 800;
         color: #fff;
         line-height: 1;
       }
 
       .league-text {
-        font-size: 2rem;
+        font-size: 1.7rem;
         font-weight: 900;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -400,7 +413,7 @@
               <button class="arrow-btn" type="button" data-panel="club" data-dir="-1">◀</button>
               <div class="value-box">
                 <div class="club-inner">
-                  <div class="club-logo" id="clubLogo">B</div>
+                  <div class="club-logo" id="clubLogo"></div>
                   <div class="club-name" id="clubName">Legia Warsaw</div>
                   <div class="club-stars" id="clubStars">
                     <span class="star">★</span>
@@ -546,7 +559,15 @@
 
       function renderClubInfo(club) {
         clubName.textContent = club.name;
-        clubLogo.textContent = club.name.charAt(0).toUpperCase();
+
+        const hasLogo = Boolean(club.logoUrl && club.logoUrl.trim());
+        if (hasLogo) {
+          clubLogo.style.display = 'flex';
+          clubLogo.innerHTML = `<img src="${club.logoUrl}" alt="${club.name} crest" />`;
+        } else {
+          clubLogo.style.display = 'none';
+          clubLogo.innerHTML = '';
+        }
 
         const stars = getClubStars(club);
         const starsHtml = Array.from({ length: 5 }, (_, i) => 
@@ -558,6 +579,18 @@
         statAtt.textContent = stats.att;
         statMid.textContent = stats.mid;
         statDef.textContent = stats.def;
+      }
+
+      function updateActiveSelectionVisual() {
+        const activePanel = clubSelectionState.activePanel;
+
+        const countrySection = document.querySelector('.country-section');
+        const clubSection = document.querySelector('.club-section');
+        const leagueSection = document.querySelector('.league-section');
+
+        countrySection.style.background = activePanel === 'country' ? '#b777d6' : '#1d1f22';
+        clubSection.style.background = activePanel === 'club' ? '#b777d6' : '#b777d6';
+        leagueSection.style.background = activePanel === 'league' ? '#b777d6' : '#2f3034';
       }
 
       function refreshSelectionState() {
@@ -696,7 +729,9 @@
         button.addEventListener('click', () => {
           const panel = button.dataset.panel;
           const direction = Number(button.dataset.dir || 1);
+          clubSelectionState.activePanel = panel;
           moveSelection(panel, direction);
+          updateActiveSelectionVisual();
         });
       });
 
@@ -708,23 +743,27 @@
         if (event.key === 'ArrowLeft') {
           event.preventDefault();
           moveSelection(clubSelectionState.activePanel, -1);
+          updateActiveSelectionVisual();
         }
 
         if (event.key === 'ArrowRight') {
           event.preventDefault();
           moveSelection(clubSelectionState.activePanel, 1);
+          updateActiveSelectionVisual();
         }
 
         if (event.key === 'ArrowUp') {
           const order = ['country', 'club', 'league'];
           const index = order.indexOf(clubSelectionState.activePanel);
           clubSelectionState.activePanel = order[(index - 1 + order.length) % order.length];
+          updateActiveSelectionVisual();
         }
 
         if (event.key === 'ArrowDown') {
           const order = ['country', 'club', 'league'];
           const index = order.indexOf(clubSelectionState.activePanel);
           clubSelectionState.activePanel = order[(index + 1) % order.length];
+          updateActiveSelectionVisual();
         }
 
         if (event.key === 'Enter') {
@@ -735,6 +774,7 @@
 
       updateDateHeader();
       refreshSelectionState();
+      updateActiveSelectionVisual();
 
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
