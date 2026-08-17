@@ -73,6 +73,35 @@
         justify-content: center;
       }
 
+      .top-date {
+        position: absolute;
+        top: 16px;
+        left: 18px;
+        z-index: 2;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        color: #f4f4f4;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+        background: transparent;
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+
+      .top-date .day-number {
+        font-size: clamp(2rem, 3vw, 3.2rem);
+        line-height: 1;
+      }
+
+      .top-date .time {
+        font-size: clamp(0.7rem, 1vw, 1rem);
+        opacity: 0.92;
+        line-height: 1;
+      }
+
       .screen {
         width: min(1000px, 92vw);
         background: var(--panel);
@@ -178,6 +207,11 @@
   </head>
   <body>
     <div class="app">
+      <div class="top-date" id="topDate">
+        <span class="day-number" id="dateDay">1</span>
+        <span class="time" id="dateTime">12:00</span>
+      </div>
+
       <div class="screen" id="gameScreen">
         <div class="title">Football Manager</div>
         <div class="subtitle">New save / database placeholder / club selection</div>
@@ -213,6 +247,13 @@
       const startSaveBtn = document.getElementById('startSaveBtn');
       const resetBtn = document.getElementById('resetBtn');
       const clubSelection = document.getElementById('clubSelection');
+      const dateDay = document.getElementById('dateDay');
+      const dateTime = document.getElementById('dateTime');
+
+      function updateDateHeader() {
+        dateDay.textContent = String(gameState.day);
+        dateTime.textContent = `${String(gameState.hour).padStart(2, '0')}:00`;
+      }
 
       function getDatabase() {
         return window.gameDatabase || {
@@ -274,7 +315,10 @@
             const save = createSave();
             console.log('Save created:', save);
             clubSelection.classList.add('hidden');
-            startSaveBtn.textContent = `Club: ${club.name}`;
+            startSaveBtn.classList.add('hidden');
+            resetBtn.classList.add('hidden');
+            document.querySelector('.screen').style.display = 'none';
+            updateDateHeader();
           });
 
           clubSelection.appendChild(card);
@@ -286,6 +330,7 @@
         saveStatus.textContent = 'Creating game save...';
         clubSelection.classList.remove('hidden');
         renderClubSelection();
+        updateDateHeader();
       }
 
       function resetGameData() {
@@ -295,7 +340,12 @@
         clubSelection.classList.add('hidden');
         saveStatus.textContent = 'Data reset. Waiting to start...';
         startSaveBtn.textContent = 'Start save';
+        startSaveBtn.classList.remove('hidden');
+        resetBtn.classList.remove('hidden');
+        document.querySelector('.screen').style.display = 'block';
       }
+
+      updateDateHeader();
 
       startSaveBtn.addEventListener('click', startSaveProcedure);
       resetBtn.addEventListener('click', resetGameData);
