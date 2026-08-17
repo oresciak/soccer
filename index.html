@@ -971,13 +971,19 @@
 
           if (event.key === 'ArrowUp') {
             event.preventDefault();
-            moveMainMenuSelection(-1);
+            if (mainMenuSelectionIndex > 0) {
+              mainMenuSelectionIndex = Math.max(0, mainMenuSelectionIndex - 1);
+              updateMainMenuSelection();
+            }
             return;
           }
 
           if (event.key === 'ArrowDown') {
             event.preventDefault();
-            moveMainMenuSelection(1);
+            if (mainMenuSelectionIndex >= 0 && mainMenuSelectionIndex < mainMenuButtons.length - 1) {
+              mainMenuSelectionIndex = Math.min(mainMenuButtons.length - 1, mainMenuSelectionIndex + 1);
+              updateMainMenuSelection();
+            }
             return;
           }
 
