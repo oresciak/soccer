@@ -608,7 +608,7 @@
         const leagueSection = document.querySelector('.league-section');
 
         countrySection.style.background = activePanel === 'country' ? '#b777d6' : '#1d1f22';
-        clubSection.style.background = activePanel === 'club' ? '#b777d6' : '#a8a8ad';
+        clubSection.style.background = activePanel === 'club' ? '#b777d6' : '#1d1f22';
         leagueSection.style.background = activePanel === 'league' ? '#b777d6' : '#2f3034';
 
         if (activePanel === 'select') {
@@ -616,7 +616,7 @@
           selectClubBtn.style.color = '#ffffff';
           selectClubBtn.style.boxShadow = 'inset 0 0 0 2px rgba(255,255,255,0.18)';
         } else {
-          selectClubBtn.style.background = 'linear-gradient(135deg, #a7a9b0, #7f8188)';
+          selectClubBtn.style.background = 'linear-gradient(135deg, #1d1f22, #2f3034)';
           selectClubBtn.style.color = '#f4f4f6';
           selectClubBtn.style.boxShadow = 'none';
         }
