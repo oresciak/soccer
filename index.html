@@ -377,10 +377,6 @@
         font-weight: 700;
       }
 
-      button:hover {
-        transform: translateY(-1px);
-      }
-
       .start {
         background: linear-gradient(135deg, #b777d6, #9e62c9);
         color: #ffffff;
@@ -502,6 +498,7 @@
       const saveStatus = document.getElementById('saveStatus');
       const startSaveBtn = document.getElementById('startSaveBtn');
       const resetBtn = document.getElementById('resetBtn');
+      const topDate = document.getElementById('topDate');
       const dateDay = document.getElementById('dateDay');
       const dateTime = document.getElementById('dateTime');
       const countryValue = document.getElementById('countryValue');
@@ -689,6 +686,7 @@
         if (!club) return;
 
         gameState.clubId = club.id;
+        topDate.classList.remove('hidden');
         saveStatus.textContent = `Selected club: ${club.name} | save in progress...`;
         const save = createSave();
         console.log('Save created:', save);
@@ -734,6 +732,7 @@
 
       function startSaveProcedure() {
         gameState.started = true;
+        topDate.classList.add('hidden');
         gameScreen.classList.remove('hidden');
         startButtons.classList.add('hidden');
         saveStatus.classList.add('hidden');
@@ -745,6 +744,7 @@
         localStorage.removeItem(gameState.saveName);
         gameState.clubId = null;
         gameState.started = false;
+        topDate.classList.add('hidden');
         saveStatus.textContent = 'Data reset. Waiting to start...';
         saveStatus.classList.remove('hidden');
         gameScreen.classList.add('hidden');
@@ -824,6 +824,7 @@
       });
 
       updateDateHeader();
+      topDate.classList.add('hidden');
       refreshSelectionState();
       updateActiveSelectionVisual();
 
