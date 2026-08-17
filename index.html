@@ -102,87 +102,185 @@
       }
 
       .screen {
-        width: min(900px, 84vw);
-        background: rgba(7, 12, 18, 0.72);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 18px;
-        padding: 26px 22px 18px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+        width: min(520px, 90vw);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
       }
 
       .selection-title {
-        text-align: center;
-        font-size: clamp(1.6rem, 2.2vw, 2.2rem);
-        font-weight: 700;
-        margin-bottom: 22px;
-        letter-spacing: 0.04em;
+        display: none;
       }
 
-      .selection-row {
+      .fifa-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+      }
+
+      .fifa-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px 0;
+        border-top: 2px solid rgba(255,255,255,0.15);
+        border-bottom: 2px solid rgba(255,255,255,0.15);
+        margin-bottom: 0;
+      }
+
+      .fifa-section:first-child {
+        border-top: 2px solid rgba(255,255,255,0.3);
+      }
+
+      .fifa-section:last-child {
+        border-bottom: 2px solid rgba(255,255,255,0.3);
+      }
+
+      .section-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .section-content {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        margin-bottom: 18px;
+        gap: 16px;
+        width: 100%;
       }
 
-      .selector-arrow {
-        width: 48px;
-        height: 48px;
+      .arrow-btn {
+        width: 44px;
+        height: 44px;
         border: none;
-        border-radius: 10px;
+        border-radius: 8px;
         background: rgba(255,255,255,0.08);
         color: var(--text);
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         cursor: pointer;
-        line-height: 1;
+        flex-shrink: 0;
+        transition: all 0.15s ease;
       }
 
-      .selector-box {
+      .arrow-btn:hover {
+        background: rgba(255,255,255,0.15);
+      }
+
+      .value-box {
+        flex: 1;
+        text-align: center;
+        min-height: 60px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 84px;
-        width: min(520px, 62vw);
-        border: 1px solid rgba(255,255,255,0.14);
-        border-radius: 12px;
-        background: rgba(255,255,255,0.04);
-        text-align: center;
-        padding: 12px 18px;
       }
 
-      .selector-box.country-box {
-        min-height: 78px;
+      .club-section .value-box {
+        min-height: 140px;
       }
 
-      .selector-box.club-box {
-        min-height: 128px;
-        width: min(360px, 40vw);
+      .club-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.05);
+        border: 2px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: 800;
       }
 
-      .selector-box.league-box {
-        min-height: 78px;
-      }
-
-      .selector-label {
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--muted);
+      .club-name {
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        font-weight: 800;
         margin-bottom: 8px;
       }
 
-      .selector-value {
-        font-size: clamp(1rem, 1.6vw, 1.5rem);
+      .club-stars {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+
+      .star {
+        font-size: 1rem;
+        color: var(--accent-2);
+      }
+
+      .club-stats {
+        display: flex;
+        gap: 12px;
+        font-size: 0.85rem;
+        margin-top: 8px;
+      }
+
+      .stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 2px;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--accent);
+      }
+
+      .country-text {
+        font-size: clamp(1.2rem, 2.5vw, 1.8rem);
         font-weight: 700;
-        line-height: 1.2;
+      }
+
+      .league-text {
+        font-size: clamp(1rem, 2vw, 1.4rem);
+        font-weight: 700;
+      }
+
+      .selection-row {
+        display: none;
+      }
+
+      .selector-arrow {
+        display: none;
+      }
+
+      .selector-box {
+        display: none;
+      }
+
+      .selector-label {
+        display: none;
+      }
+
+      .selector-value {
+        display: none;
       }
 
       .selection-actions {
         display: flex;
         justify-content: center;
-        margin-top: 18px;
+        margin-top: 20px;
       }
 
       .select-button {
@@ -192,9 +290,10 @@
         background: linear-gradient(135deg, var(--accent), #14b8a6);
         color: #062b2a;
         cursor: pointer;
-        padding: 12px 22px;
+        padding: 14px 28px;
         font-weight: 800;
-        min-width: 160px;
+        min-width: 180px;
+        font-size: clamp(0.95rem, 1.5vw, 1.1rem);
       }
 
       .button-row {
@@ -255,33 +354,60 @@
       </div>
 
       <div class="screen hidden" id="gameScreen">
-        <div class="selection-title">Select club</div>
-
-        <div class="selection-row">
-          <button class="selector-arrow" type="button" data-panel="country" data-dir="-1">◀</button>
-          <div class="selector-box country-box" data-panel="country">
-            <div class="selector-label">Country</div>
-            <div class="selector-value" id="countryValue">Poland</div>
+        <div class="fifa-panel">
+          <div class="fifa-section country-section">
+            <div class="section-label">Country</div>
+            <div class="section-content">
+              <button class="arrow-btn" type="button" data-panel="country" data-dir="-1">◀</button>
+              <div class="value-box">
+                <div class="country-text" id="countryValue">Poland</div>
+              </div>
+              <button class="arrow-btn" type="button" data-panel="country" data-dir="1">▶</button>
+            </div>
           </div>
-          <button class="selector-arrow" type="button" data-panel="country" data-dir="1">▶</button>
-        </div>
 
-        <div class="selection-row">
-          <button class="selector-arrow" type="button" data-panel="club" data-dir="-1">◀</button>
-          <div class="selector-box club-box" data-panel="club">
-            <div class="selector-label">Club</div>
-            <div class="selector-value" id="clubValue">Legia Warsaw</div>
+          <div class="fifa-section club-section">
+            <div class="section-label">Club</div>
+            <div class="section-content">
+              <button class="arrow-btn" type="button" data-panel="club" data-dir="-1">◀</button>
+              <div class="value-box">
+                <div class="club-logo" id="clubLogo">●</div>
+                <div class="club-name" id="clubName">Legia Warsaw</div>
+                <div class="club-stars" id="clubStars">
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                  <span class="star">★</span>
+                </div>
+                <div class="club-stats" id="clubStats">
+                  <div class="stat">
+                    <div class="stat-label">ATT</div>
+                    <div class="stat-value" id="statAtt">86</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">MID</div>
+                    <div class="stat-value" id="statMid">82</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-label">DEF</div>
+                    <div class="stat-value" id="statDef">82</div>
+                  </div>
+                </div>
+              </div>
+              <button class="arrow-btn" type="button" data-panel="club" data-dir="1">▶</button>
+            </div>
           </div>
-          <button class="selector-arrow" type="button" data-panel="club" data-dir="1">▶</button>
-        </div>
 
-        <div class="selection-row">
-          <button class="selector-arrow" type="button" data-panel="league" data-dir="-1">◀</button>
-          <div class="selector-box league-box" data-panel="league">
-            <div class="selector-label">League</div>
-            <div class="selector-value" id="leagueValue">Polish Premier League</div>
+          <div class="fifa-section league-section">
+            <div class="section-label">League</div>
+            <div class="section-content">
+              <button class="arrow-btn" type="button" data-panel="league" data-dir="-1">◀</button>
+              <div class="value-box">
+                <div class="league-text" id="leagueValue">Polish Premier League</div>
+              </div>
+              <button class="arrow-btn" type="button" data-panel="league" data-dir="1">▶</button>
+            </div>
           </div>
-          <button class="selector-arrow" type="button" data-panel="league" data-dir="1">▶</button>
         </div>
 
         <div class="selection-actions">
@@ -319,7 +445,12 @@
       const dateDay = document.getElementById('dateDay');
       const dateTime = document.getElementById('dateTime');
       const countryValue = document.getElementById('countryValue');
-      const clubValue = document.getElementById('clubValue');
+      const clubName = document.getElementById('clubName');
+      const clubLogo = document.getElementById('clubLogo');
+      const clubStars = document.getElementById('clubStars');
+      const statAtt = document.getElementById('statAtt');
+      const statMid = document.getElementById('statMid');
+      const statDef = document.getElementById('statDef');
       const leagueValue = document.getElementById('leagueValue');
       const selectClubBtn = document.getElementById('selectClubBtn');
       const startButtons = document.getElementById('startButtons');
@@ -362,6 +493,43 @@
         });
       }
 
+      function getClubStars(club) {
+        const prestige = club.prestige || 50;
+        return Math.ceil(prestige / 20);
+      }
+
+      function getClubStats(club) {
+        const prestige = club.prestige || 50;
+        const reputation = club.reputation || 50;
+        const transferPower = club.transferPower || 50;
+
+        const att = Math.min(99, Math.round((reputation + transferPower) / 2 + (prestige - 50) * 0.3));
+        const mid = Math.min(99, Math.round((prestige + reputation) / 2));
+        const def = Math.min(99, Math.round((prestige + transferPower) / 2 - (prestige - 50) * 0.2));
+
+        return {
+          att: Math.max(30, att),
+          mid: Math.max(30, mid),
+          def: Math.max(30, def)
+        };
+      }
+
+      function renderClubInfo(club) {
+        clubName.textContent = club.name;
+        clubLogo.textContent = club.name.charAt(0).toUpperCase();
+
+        const stars = getClubStars(club);
+        const starsHtml = Array.from({ length: 5 }, (_, i) => 
+          `<span class="star">${i < stars ? '★' : '☆'}</span>`
+        ).join('');
+        clubStars.innerHTML = starsHtml;
+
+        const stats = getClubStats(club);
+        statAtt.textContent = stats.att;
+        statMid.textContent = stats.mid;
+        statDef.textContent = stats.def;
+      }
+
       function refreshSelectionState() {
         const countries = getCountryOptions();
         if (!countries.length) return;
@@ -390,7 +558,7 @@
 
         countryValue.textContent = country.name;
         leagueValue.textContent = league ? league.name : 'No league';
-        clubValue.textContent = club ? club.name : 'No club';
+        if (club) renderClubInfo(club);
       }
 
       function moveSelection(panel, direction) {
@@ -494,7 +662,7 @@
         refreshSelectionState();
       }
 
-      document.querySelectorAll('.selector-arrow').forEach((button) => {
+      document.querySelectorAll('.arrow-btn').forEach((button) => {
         button.addEventListener('click', () => {
           const panel = button.dataset.panel;
           const direction = Number(button.dataset.dir || 1);
@@ -521,18 +689,12 @@
           const order = ['country', 'club', 'league'];
           const index = order.indexOf(clubSelectionState.activePanel);
           clubSelectionState.activePanel = order[(index - 1 + order.length) % order.length];
-          document.querySelectorAll('.selector-box').forEach((box) => {
-            box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
-          });
         }
 
         if (event.key === 'ArrowDown') {
           const order = ['country', 'club', 'league'];
           const index = order.indexOf(clubSelectionState.activePanel);
           clubSelectionState.activePanel = order[(index + 1) % order.length];
-          document.querySelectorAll('.selector-box').forEach((box) => {
-            box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
-          });
         }
 
         if (event.key === 'Enter') {
@@ -541,20 +703,8 @@
         }
       });
 
-      document.querySelectorAll('.selector-box').forEach((box) => {
-        box.addEventListener('click', () => {
-          clubSelectionState.activePanel = box.dataset.panel;
-          document.querySelectorAll('.selector-box').forEach((item) => {
-            item.style.borderColor = item.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
-          });
-        });
-      });
-
       updateDateHeader();
       refreshSelectionState();
-      document.querySelectorAll('.selector-box').forEach((box) => {
-        box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
-      });
 
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
