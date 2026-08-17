@@ -49,7 +49,6 @@
         user-select: none;
         -webkit-touch-callout: none;
         -webkit-user-drag: none;
-        user-drag: none;
       }
 
       html, body, * {
@@ -103,27 +102,99 @@
       }
 
       .screen {
-        width: min(1000px, 92vw);
-        background: var(--panel);
-        border: 1px solid var(--panel-border);
+        width: min(900px, 84vw);
+        background: rgba(7, 12, 18, 0.72);
+        border: 1px solid rgba(255,255,255,0.12);
         border-radius: 18px;
-        padding: 28px 24px;
+        padding: 26px 22px 18px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.35);
       }
 
-      .title {
+      .selection-title {
         text-align: center;
-        font-size: clamp(2rem, 3vw, 3rem);
+        font-size: clamp(1.6rem, 2.2vw, 2.2rem);
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 22px;
         letter-spacing: 0.04em;
       }
 
-      .subtitle {
+      .selection-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .selector-arrow {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.08);
+        color: var(--text);
+        font-size: 1.8rem;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .selector-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 84px;
+        width: min(520px, 62vw);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 12px;
+        background: rgba(255,255,255,0.04);
         text-align: center;
+        padding: 12px 18px;
+      }
+
+      .selector-box.country-box {
+        min-height: 78px;
+      }
+
+      .selector-box.club-box {
+        min-height: 128px;
+        width: min(360px, 40vw);
+      }
+
+      .selector-box.league-box {
+        min-height: 78px;
+      }
+
+      .selector-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
         color: var(--muted);
-        margin-bottom: 20px;
-        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .selector-value {
+        font-size: clamp(1rem, 1.6vw, 1.5rem);
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .selection-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 18px;
+      }
+
+      .select-button {
+        appearance: none;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), #14b8a6);
+        color: #062b2a;
+        cursor: pointer;
+        padding: 12px 22px;
+        font-weight: 800;
+        min-width: 160px;
       }
 
       .button-row {
@@ -171,35 +242,6 @@
         margin-bottom: 18px;
       }
 
-      .club-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 12px;
-      }
-
-      .club-card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid var(--panel-border);
-        border-radius: 12px;
-        padding: 14px;
-        cursor: pointer;
-      }
-
-      .club-card:hover {
-        border-color: rgba(45,212,191,0.8);
-      }
-
-      .club-card h3 {
-        margin: 0 0 8px;
-        font-size: 1.15rem;
-      }
-
-      .club-meta {
-        color: var(--muted);
-        font-size: 0.9rem;
-        line-height: 1.5;
-      }
-
       .hidden {
         display: none !important;
       }
@@ -212,19 +254,47 @@
         <span class="time" id="dateTime">12:00</span>
       </div>
 
-      <div class="screen" id="gameScreen">
-        <div class="title">Football Manager</div>
-        <div class="subtitle">New save / database placeholder / club selection</div>
+      <div class="screen hidden" id="gameScreen">
+        <div class="selection-title">Select club</div>
 
-        <div class="button-row">
-          <button class="primary" id="startSaveBtn">Start save</button>
-          <button class="secondary" id="resetBtn">Reset data</button>
+        <div class="selection-row">
+          <button class="selector-arrow" type="button" data-panel="country" data-dir="-1">◀</button>
+          <div class="selector-box country-box" data-panel="country">
+            <div class="selector-label">Country</div>
+            <div class="selector-value" id="countryValue">Poland</div>
+          </div>
+          <button class="selector-arrow" type="button" data-panel="country" data-dir="1">▶</button>
         </div>
 
-        <div class="save-status" id="saveStatus">Waiting to start...</div>
+        <div class="selection-row">
+          <button class="selector-arrow" type="button" data-panel="club" data-dir="-1">◀</button>
+          <div class="selector-box club-box" data-panel="club">
+            <div class="selector-label">Club</div>
+            <div class="selector-value" id="clubValue">Legia Warsaw</div>
+          </div>
+          <button class="selector-arrow" type="button" data-panel="club" data-dir="1">▶</button>
+        </div>
 
-        <div id="clubSelection" class="club-list hidden"></div>
+        <div class="selection-row">
+          <button class="selector-arrow" type="button" data-panel="league" data-dir="-1">◀</button>
+          <div class="selector-box league-box" data-panel="league">
+            <div class="selector-label">League</div>
+            <div class="selector-value" id="leagueValue">Polish Premier League</div>
+          </div>
+          <button class="selector-arrow" type="button" data-panel="league" data-dir="1">▶</button>
+        </div>
+
+        <div class="selection-actions">
+          <button class="select-button" id="selectClubBtn" type="button">Select</button>
+        </div>
       </div>
+
+      <div class="button-row" id="startButtons">
+        <button class="primary" id="startSaveBtn">Start save</button>
+        <button class="secondary" id="resetBtn">Reset data</button>
+      </div>
+
+      <div class="save-status hidden" id="saveStatus">Waiting to start...</div>
     </div>
 
     <script src="data/countries.js"></script>
@@ -246,9 +316,21 @@
       const saveStatus = document.getElementById('saveStatus');
       const startSaveBtn = document.getElementById('startSaveBtn');
       const resetBtn = document.getElementById('resetBtn');
-      const clubSelection = document.getElementById('clubSelection');
       const dateDay = document.getElementById('dateDay');
       const dateTime = document.getElementById('dateTime');
+      const countryValue = document.getElementById('countryValue');
+      const clubValue = document.getElementById('clubValue');
+      const leagueValue = document.getElementById('leagueValue');
+      const selectClubBtn = document.getElementById('selectClubBtn');
+      const startButtons = document.getElementById('startButtons');
+      const gameScreen = document.getElementById('gameScreen');
+
+      let clubSelectionState = {
+        countryIndex: 0,
+        leagueIndex: 0,
+        clubIndex: 0,
+        activePanel: 'country'
+      };
 
       function updateDateHeader() {
         dateDay.textContent = String(gameState.day);
@@ -262,6 +344,100 @@
           clubs: [],
           players: []
         };
+      }
+
+      function getCountryOptions() {
+        return getDatabase().countries || [];
+      }
+
+      function getLeagueOptionsForCountry(countryId) {
+        return (getDatabase().leagues || []).filter((league) => league.countryId === countryId);
+      }
+
+      function getClubOptionsForCountryAndLeague(countryId, leagueId) {
+        return (getDatabase().clubs || []).filter((club) => {
+          if (club.countryId !== countryId) return false;
+          if (leagueId) return club.leagueId === leagueId;
+          return true;
+        });
+      }
+
+      function refreshSelectionState() {
+        const countries = getCountryOptions();
+        if (!countries.length) return;
+
+        const country = countries[clubSelectionState.countryIndex] || countries[0];
+        const leagues = getLeagueOptionsForCountry(country.id);
+        if (!leagues.length) {
+          clubSelectionState.leagueIndex = 0;
+        } else {
+          if (clubSelectionState.leagueIndex >= leagues.length) {
+            clubSelectionState.leagueIndex = 0;
+          }
+        }
+
+        const league = leagues[clubSelectionState.leagueIndex] || leagues[0];
+        const clubs = getClubOptionsForCountryAndLeague(country.id, league ? league.id : null);
+        if (!clubs.length) {
+          clubSelectionState.clubIndex = 0;
+        } else {
+          if (clubSelectionState.clubIndex >= clubs.length) {
+            clubSelectionState.clubIndex = 0;
+          }
+        }
+
+        const club = clubs[clubSelectionState.clubIndex] || clubs[0];
+
+        countryValue.textContent = country.name;
+        leagueValue.textContent = league ? league.name : 'No league';
+        clubValue.textContent = club ? club.name : 'No club';
+      }
+
+      function moveSelection(panel, direction) {
+        const countries = getCountryOptions();
+        const currentCountry = countries[clubSelectionState.countryIndex] || countries[0];
+        const leagues = getLeagueOptionsForCountry(currentCountry.id);
+        const currentLeague = leagues[clubSelectionState.leagueIndex] || leagues[0];
+        const clubs = getClubOptionsForCountryAndLeague(currentCountry.id, currentLeague ? currentLeague.id : null);
+
+        if (panel === 'country') {
+          clubSelectionState.countryIndex = (clubSelectionState.countryIndex + direction + countries.length) % countries.length;
+          clubSelectionState.leagueIndex = 0;
+          clubSelectionState.clubIndex = 0;
+        }
+
+        if (panel === 'league') {
+          if (!leagues.length) return;
+          clubSelectionState.leagueIndex = (clubSelectionState.leagueIndex + direction + leagues.length) % leagues.length;
+          clubSelectionState.clubIndex = 0;
+        }
+
+        if (panel === 'club') {
+          if (!clubs.length) return;
+          clubSelectionState.clubIndex = (clubSelectionState.clubIndex + direction + clubs.length) % clubs.length;
+        }
+
+        refreshSelectionState();
+      }
+
+      function selectCurrentClub() {
+        const countries = getCountryOptions();
+        const country = countries[clubSelectionState.countryIndex] || countries[0];
+        const leagues = getLeagueOptionsForCountry(country.id);
+        const league = leagues[clubSelectionState.leagueIndex] || leagues[0];
+        const clubs = getClubOptionsForCountryAndLeague(country.id, league ? league.id : null);
+        const club = clubs[clubSelectionState.clubIndex] || clubs[0];
+
+        if (!club) return;
+
+        gameState.clubId = club.id;
+        saveStatus.textContent = `Selected club: ${club.name} | save in progress...`;
+        const save = createSave();
+        console.log('Save created:', save);
+
+        gameScreen.classList.add('hidden');
+        startButtons.classList.add('hidden');
+        saveStatus.classList.remove('hidden');
       }
 
       function createSave() {
@@ -291,45 +467,19 @@
         return save;
       }
 
-      function renderClubSelection() {
-        const db = getDatabase();
-        clubSelection.innerHTML = '';
-
-        db.clubs.forEach((club) => {
-          const card = document.createElement('div');
-          card.className = 'club-card';
-          card.innerHTML = `
-            <h3>${club.name}</h3>
-            <div class="club-meta">
-              <div>League: ${db.leagues.find(l => l.id === club.leagueId)?.name || 'Missing league'}</div>
-              <div>Country: ${db.countries.find(c => c.id === club.countryId)?.name || 'Missing country'}</div>
-              <div>Prestige: ${club.prestige}</div>
-              <div>Budget: €${(club.budget / 1000000).toFixed(1)}M</div>
-              <div>Players: ${club.squadSize || 22}</div>
-            </div>
-          `;
-
-          card.addEventListener('click', () => {
-            gameState.clubId = club.id;
-            saveStatus.textContent = `Selected club: ${club.name} | save in progress...`;
-            const save = createSave();
-            console.log('Save created:', save);
-            clubSelection.classList.add('hidden');
-            startSaveBtn.classList.add('hidden');
-            resetBtn.classList.add('hidden');
-            document.querySelector('.screen').style.display = 'none';
-            updateDateHeader();
-          });
-
-          clubSelection.appendChild(card);
-        });
+      function activateSelectionScreen() {
+        gameScreen.classList.remove('hidden');
+        startButtons.classList.remove('hidden');
+        saveStatus.classList.add('hidden');
+        refreshSelectionState();
       }
 
       function startSaveProcedure() {
         gameState.started = true;
-        saveStatus.textContent = 'Creating game save...';
-        clubSelection.classList.remove('hidden');
-        renderClubSelection();
+        gameScreen.classList.remove('hidden');
+        startButtons.classList.add('hidden');
+        saveStatus.classList.add('hidden');
+        refreshSelectionState();
         updateDateHeader();
       }
 
@@ -337,18 +487,74 @@
         localStorage.removeItem(gameState.saveName);
         gameState.clubId = null;
         gameState.started = false;
-        clubSelection.classList.add('hidden');
         saveStatus.textContent = 'Data reset. Waiting to start...';
-        startSaveBtn.textContent = 'Start save';
-        startSaveBtn.classList.remove('hidden');
-        resetBtn.classList.remove('hidden');
-        document.querySelector('.screen').style.display = 'block';
+        saveStatus.classList.remove('hidden');
+        gameScreen.classList.add('hidden');
+        startButtons.classList.remove('hidden');
+        refreshSelectionState();
       }
 
-      updateDateHeader();
+      document.querySelectorAll('.selector-arrow').forEach((button) => {
+        button.addEventListener('click', () => {
+          const panel = button.dataset.panel;
+          const direction = Number(button.dataset.dir || 1);
+          moveSelection(panel, direction);
+        });
+      });
 
+      selectClubBtn.addEventListener('click', selectCurrentClub);
       startSaveBtn.addEventListener('click', startSaveProcedure);
       resetBtn.addEventListener('click', resetGameData);
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          moveSelection(clubSelectionState.activePanel, -1);
+        }
+
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          moveSelection(clubSelectionState.activePanel, 1);
+        }
+
+        if (event.key === 'ArrowUp') {
+          const order = ['country', 'club', 'league'];
+          const index = order.indexOf(clubSelectionState.activePanel);
+          clubSelectionState.activePanel = order[(index - 1 + order.length) % order.length];
+          document.querySelectorAll('.selector-box').forEach((box) => {
+            box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
+          });
+        }
+
+        if (event.key === 'ArrowDown') {
+          const order = ['country', 'club', 'league'];
+          const index = order.indexOf(clubSelectionState.activePanel);
+          clubSelectionState.activePanel = order[(index + 1) % order.length];
+          document.querySelectorAll('.selector-box').forEach((box) => {
+            box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
+          });
+        }
+
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          selectCurrentClub();
+        }
+      });
+
+      document.querySelectorAll('.selector-box').forEach((box) => {
+        box.addEventListener('click', () => {
+          clubSelectionState.activePanel = box.dataset.panel;
+          document.querySelectorAll('.selector-box').forEach((item) => {
+            item.style.borderColor = item.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
+          });
+        });
+      });
+
+      updateDateHeader();
+      refreshSelectionState();
+      document.querySelectorAll('.selector-box').forEach((box) => {
+        box.style.borderColor = box.dataset.panel === clubSelectionState.activePanel ? 'rgba(45,212,191,0.9)' : 'rgba(255,255,255,0.14)';
+      });
 
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
