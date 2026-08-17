@@ -3,8 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Soccer</title>
+    <title>Soccer Save</title>
     <style>
+      :root {
+        --bg: rgba(7, 15, 24, 0.7);
+        --panel: rgba(9, 17, 28, 0.85);
+        --panel-border: rgba(255,255,255,0.12);
+        --accent: #2dd4bf;
+        --accent-2: #facc15;
+        --text: #ecfdf5;
+        --muted: #bfd3d1;
+      }
+
       html, body {
         margin: 0;
         width: 100%;
@@ -21,6 +31,15 @@
         background-position: center center;
         background-size: cover;
         background-attachment: fixed;
+        color: var(--text);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.38);
+        pointer-events: none;
       }
 
       * {
@@ -44,10 +63,236 @@
       *::-webkit-scrollbar {
         display: none;
       }
+
+      .app {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .screen {
+        width: min(900px, 90vw);
+        background: var(--panel);
+        border: 1px solid var(--panel-border);
+        border-radius: 18px;
+        padding: 28px 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      }
+
+      .title {
+        font-size: 2.3rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: 0.04em;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin-bottom: 18px;
+        font-size: 1rem;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      button {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 1rem;
+        font-weight: 700;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+
+      .primary {
+        background: linear-gradient(135deg, var(--accent), #14b8a6);
+        color: #062b2a;
+      }
+
+      .secondary {
+        background: rgba(255,255,255,0.08);
+        color: var(--text);
+        border: 1px solid var(--panel-border);
+      }
+
+      .save-status {
+        color: var(--accent-2);
+        min-height: 24px;
+        font-weight: 600;
+        margin-bottom: 18px;
+      }
+
+      .club-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      .club-card {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 14px;
+        cursor: pointer;
+      }
+
+      .club-card:hover {
+        border-color: rgba(45,212,191,0.8);
+      }
+
+      .club-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.15rem;
+      }
+
+      .club-meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .hidden {
+        display: none !important;
+      }
     </style>
   </head>
   <body>
+    <div class="app">
+      <div class="screen" id="gameScreen">
+        <div class="title">Football Manager</div>
+        <div class="subtitle">Nowa gra / zapis / baza danych placeholder</div>
+
+        <div class="button-row">
+          <button class="primary" id="startSaveBtn">Start zapisu</button>
+          <button class="secondary" id="resetBtn">Reset danych</button>
+        </div>
+
+        <div class="save-status" id="saveStatus">Oczekiwanie na start...</div>
+
+        <div id="clubSelection" class="club-list hidden"></div>
+      </div>
+    </div>
+
+    <script src="data/countries.js"></script>
+    <script src="data/leagues.js"></script>
+    <script src="data/clubs.js"></script>
+    <script src="data/players.js"></script>
+
     <script>
+      let gameState = {
+        year: 2027,
+        month: 7,
+        day: 1,
+        hour: 12,
+        started: false,
+        clubId: null,
+        saveName: 'save_game_1'
+      };
+
+      const saveStatus = document.getElementById('saveStatus');
+      const startSaveBtn = document.getElementById('startSaveBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const clubSelection = document.getElementById('clubSelection');
+
+      function getDatabase() {
+        return window.gameDatabase || {
+          countries: [],
+          leagues: [],
+          clubs: [],
+          players: []
+        };
+      }
+
+      function createSave() {
+        const db = getDatabase();
+        const save = {
+          meta: {
+            saveName: gameState.saveName,
+            startedAt: new Date(Date.UTC(gameState.year, gameState.month - 1, gameState.day, gameState.hour)).toISOString(),
+            version: '0.1.0'
+          },
+          date: {
+            year: gameState.year,
+            month: gameState.month,
+            day: gameState.day,
+            hour: gameState.hour
+          },
+          selectedClubId: gameState.clubId,
+          database: {
+            countries: db.countries,
+            leagues: db.leagues,
+            clubs: db.clubs,
+            players: db.players
+          }
+        };
+
+        localStorage.setItem(gameState.saveName, JSON.stringify(save));
+        return save;
+      }
+
+      function renderClubSelection() {
+        const db = getDatabase();
+        clubSelection.innerHTML = '';
+
+        db.clubs.forEach((club) => {
+          const card = document.createElement('div');
+          card.className = 'club-card';
+          card.innerHTML = `
+            <h3>${club.name}</h3>
+            <div class="club-meta">
+              <div>Liga: ${db.leagues.find(l => l.id === club.leagueId)?.name || 'Brak ligi'}</div>
+              <div>Państwo: ${db.countries.find(c => c.id === club.countryId)?.name || 'Brak państwa'}</div>
+              <div>Prestiz: ${club.prestige}</div>
+              <div>Budżet: €${(club.budget / 1000000).toFixed(1)}M</div>
+            </div>
+          `;
+
+          card.addEventListener('click', () => {
+            gameState.clubId = club.id;
+            saveStatus.textContent = `Wybrany klub: ${club.name} | zapis tworzony...`;
+            const save = createSave();
+            console.log('Zapis utworzony:', save);
+            clubSelection.classList.add('hidden');
+            startSaveBtn.textContent = `Wybrany klub: ${club.name}`;
+          });
+
+          clubSelection.appendChild(card);
+        });
+      }
+
+      function startSaveProcedure() {
+        gameState.started = true;
+        saveStatus.textContent = 'Tworzenie zapisu gry...';
+        clubSelection.classList.remove('hidden');
+        renderClubSelection();
+      }
+
+      function resetGameData() {
+        localStorage.removeItem(gameState.saveName);
+        gameState.clubId = null;
+        gameState.started = false;
+        clubSelection.classList.add('hidden');
+        saveStatus.textContent = 'Dane zresetowane. Oczekiwanie na start...';
+        startSaveBtn.textContent = 'Start zapisu';
+      }
+
+      startSaveBtn.addEventListener('click', startSaveProcedure);
+      resetBtn.addEventListener('click', resetGameData);
+
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
       });

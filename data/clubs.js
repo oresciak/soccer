@@ -1,0 +1,107 @@
+window.gameDatabase = window.gameDatabase || {};
+window.gameDatabase.clubs = [
+  {
+    id: 'legia',
+    name: 'Legia Warszawa',
+    countryId: 'poland',
+    leagueId: 'poland-1',
+    stadium: 'Stadion Wojska Polskiego',
+    prestige: 84,
+    budget: 6800000,
+    reputation: 82,
+    status: 'Top club',
+    transferPower: 76,
+    youthRating: 74
+  },
+  {
+    id: 'wisla',
+    name: 'Wisła Kraków',
+    countryId: 'poland',
+    leagueId: 'poland-1',
+    stadium: 'Stadion Miejski w Krakowie',
+    prestige: 73,
+    budget: 4600000,
+    reputation: 69,
+    status: 'Established club',
+    transferPower: 68,
+    youthRating: 71
+  },
+  {
+    id: 'piast',
+    name: 'Piast Gliwice',
+    countryId: 'poland',
+    leagueId: 'poland-1',
+    stadium: 'Stadion Piast',
+    prestige: 58,
+    budget: 3000000,
+    reputation: 58,
+    status: 'Ambitious club',
+    transferPower: 62,
+    youthRating: 67
+  },
+  {
+    id: 'podbeskidzie',
+    name: 'Podbeskidzie Bielsko-Biała',
+    countryId: 'poland',
+    leagueId: 'poland-2',
+    stadium: 'Stadion Miejski',
+    prestige: 47,
+    budget: 1700000,
+    reputation: 46,
+    status: 'Mid-table club',
+    transferPower: 52,
+    youthRating: 61
+  },
+  {
+    id: 'arka',
+    name: 'Arka Gdynia',
+    countryId: 'poland',
+    leagueId: 'poland-2',
+    stadium: 'Stadion Miejski',
+    prestige: 54,
+    budget: 2300000,
+    reputation: 52,
+    status: 'Rising club',
+    transferPower: 58,
+    youthRating: 64
+  },
+  {
+    id: 'chelsea',
+    name: 'Chelsea',
+    countryId: 'england',
+    leagueId: 'england-1',
+    stadium: 'Stamford Bridge',
+    prestige: 92,
+    budget: 185000000,
+    reputation: 94,
+    status: 'Elite club',
+    transferPower: 94,
+    youthRating: 82
+  },
+  {
+    id: 'aston-villa',
+    name: 'Aston Villa',
+    countryId: 'england',
+    leagueId: 'england-1',
+    stadium: 'Villa Park',
+    prestige: 84,
+    budget: 120000000,
+    reputation: 80,
+    status: 'Established club',
+    transferPower: 79,
+    youthRating: 75
+  },
+  {
+    id: 'leicester',
+    name: 'Leicester City',
+    countryId: 'england',
+    leagueId: 'england-1',
+    stadium: 'King Power Stadium',
+    prestige: 74,
+    budget: 96000000,
+    reputation: 72,
+    status: 'Competitive club',
+    transferPower: 72,
+    youthRating: 70
+  }
+];
