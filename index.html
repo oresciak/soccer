@@ -380,37 +380,36 @@
       .career-launcher {
         flex: 1.35;
         min-height: 600px;
-        background: rgba(15, 17, 22, 0.9);
-        border: 2px solid rgba(255,255,255,0.12);
-        box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+        background: rgba(15, 17, 22, 0.98);
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
         position: relative;
         color: #fff;
         text-transform: uppercase;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         letter-spacing: 0.1em;
         cursor: pointer;
+        padding: 22px 24px 20px;
       }
 
-      .career-launcher.is-active {
-        outline: 2px solid rgba(183, 119, 214, 0.9);
-        outline-offset: -4px;
+      .career-launcher.is-active,
+      .menu-panel.is-active {
+        background: #b777d6;
+      }
+
+      .career-launcher:not(.is-active),
+      .menu-panel:not(.is-active) {
+        background: rgba(15, 17, 22, 0.98);
       }
 
       .career-image-slot {
-        width: 78%;
-        height: 280px;
-        border: 2px solid rgba(255,255,255,0.18);
-        background: rgba(255,255,255,0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255,255,255,0.5);
-        font-size: 1rem;
-        letter-spacing: 0.12em;
+        width: 100%;
+        height: 200px;
+        display: block;
+        opacity: 0;
+        pointer-events: none;
         margin-bottom: 28px;
       }
 
@@ -418,64 +417,56 @@
         font-size: clamp(2rem, 2.4vw, 3rem);
         font-weight: 900;
         letter-spacing: 0.12em;
-        text-align: center;
+        text-align: left;
         line-height: 1.1;
       }
 
       .menu-side {
         flex: 0.9;
+        min-height: 600px;
         display: flex;
         flex-direction: column;
         gap: 16px;
       }
 
       .menu-panel {
-        height: 180px;
-        background: rgba(15, 17, 22, 0.9);
-        border: 2px solid rgba(255,255,255,0.12);
+        height: calc((600px - 32px) / 3);
+        background: rgba(15, 17, 22, 0.98);
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: stretch;
+        justify-content: stretch;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         cursor: pointer;
         position: relative;
-      }
-
-      .menu-panel.is-active {
-        outline: 2px solid rgba(183, 119, 214, 0.9);
-        outline-offset: -4px;
+        padding: 18px 20px;
       }
 
       .menu-panel-content {
         width: 100%;
         height: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
         flex-direction: column;
         gap: 12px;
       }
 
       .menu-thumb {
-        width: 72%;
-        height: 82px;
-        border: 2px solid rgba(255,255,255,0.18);
-        background: rgba(255,255,255,0.05);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255,255,255,0.5);
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
+        width: 100%;
+        height: 104px;
+        opacity: 0;
+        pointer-events: none;
+        display: block;
       }
 
       .menu-panel-label {
         font-size: 1.2rem;
         font-weight: 800;
         line-height: 1;
+        text-align: left;
       }
 
       button {
@@ -668,8 +659,16 @@
       }
 
       function moveMainMenuSelection(direction) {
-        mainMenuSelectionIndex = (mainMenuSelectionIndex + direction + mainMenuButtons.length) % mainMenuButtons.length;
-        updateMainMenuSelection();
+        if (direction < 0) {
+          mainMenuSelectionIndex = 0;
+          updateMainMenuSelection();
+          return;
+        }
+
+        if (mainMenuSelectionIndex === 0) {
+          mainMenuSelectionIndex = 1;
+          updateMainMenuSelection();
+        }
       }
 
       function activateMainMenuSelection() {
@@ -963,7 +962,10 @@
 
           if (event.key === 'ArrowRight') {
             event.preventDefault();
-            moveMainMenuSelection(1);
+            if (mainMenuSelectionIndex === 0) {
+              mainMenuSelectionIndex = 1;
+              updateMainMenuSelection();
+            }
             return;
           }
 
