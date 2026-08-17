@@ -358,6 +358,71 @@
         justify-content: center;
       }
 
+      .post-select-menu {
+        width: 100%;
+        margin-top: 18px;
+      }
+
+      .post-select-grid {
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .post-select-choice {
+        flex: 1;
+        min-height: 134px;
+        background: rgba(15, 17, 22, 0.98);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 12px 8px 10px;
+        cursor: pointer;
+      }
+
+      .post-select-choice.is-active {
+        background: #b777d6;
+      }
+
+      .post-select-choice-main {
+        width: 100%;
+        text-align: center;
+        font-size: 1.05rem;
+        font-weight: 900;
+        line-height: 1.1;
+        margin-top: 4px;
+      }
+
+      .post-select-choice-sub {
+        width: 100%;
+        text-align: center;
+        font-size: 0.52rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        opacity: 0.85;
+        margin-top: auto;
+      }
+
+      .post-select-choice.select-choice {
+        min-width: 150px;
+      }
+
+      .post-select-choice.select-choice .post-select-choice-main {
+        margin-top: auto;
+        margin-bottom: auto;
+        font-size: 1.45rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
       .button-row {
         display: flex;
         justify-content: center;
@@ -570,6 +635,34 @@
         <div class="selection-actions">
           <button class="select-button" id="selectClubBtn" type="button">SELECT</button>
         </div>
+
+        <div class="post-select-menu hidden" id="postSelectMenu">
+          <div class="post-select-grid">
+            <button class="post-select-choice is-active" type="button" data-post-index="0">
+              <span class="post-select-choice-main">button1</span>
+              <span class="post-select-choice-sub">sub</span>
+            </button>
+            <button class="post-select-choice" type="button" data-post-index="1">
+              <span class="post-select-choice-main">button2</span>
+              <span class="post-select-choice-sub">sub</span>
+            </button>
+            <button class="post-select-choice" type="button" data-post-index="2">
+              <span class="post-select-choice-main">button3</span>
+              <span class="post-select-choice-sub">sub</span>
+            </button>
+            <button class="post-select-choice" type="button" data-post-index="3">
+              <span class="post-select-choice-main">button4</span>
+              <span class="post-select-choice-sub">sub</span>
+            </button>
+            <button class="post-select-choice" type="button" data-post-index="4">
+              <span class="post-select-choice-main">button5</span>
+              <span class="post-select-choice-sub">sub</span>
+            </button>
+            <button class="post-select-choice select-choice" type="button" data-post-index="5">
+              <span class="post-select-choice-main">Select</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="button-row" id="startButtons">
@@ -637,12 +730,15 @@
       const selectClubBtn = document.getElementById('selectClubBtn');
       const startButtons = document.getElementById('startButtons');
       const gameScreen = document.getElementById('gameScreen');
+      const postSelectMenu = document.getElementById('postSelectMenu');
+      const postSelectChoices = Array.from(document.querySelectorAll('.post-select-choice'));
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
       ];
 
       let mainMenuSelectionIndex = 0;
+      let postSelectionIndex = 0;
 
       let clubSelectionState = {
         countryIndex: 0,
@@ -655,6 +751,12 @@
         mainMenuButtons.forEach((button, index) => {
           const isActive = index === mainMenuSelectionIndex;
           button.classList.toggle('is-active', isActive);
+        });
+      }
+
+      function updatePostSelectionVisual() {
+        postSelectChoices.forEach((button, index) => {
+          button.classList.toggle('is-active', index === postSelectionIndex);
         });
       }
 
@@ -869,9 +971,10 @@
         const save = createSave();
         console.log('Save created:', save);
 
-        gameScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
         startButtons.classList.add('hidden');
-        saveStatus.classList.remove('hidden');
+        saveStatus.classList.add('hidden');
+        showPostSelectionMenu();
       }
 
       function createSave() {
@@ -905,7 +1008,18 @@
         gameScreen.classList.remove('hidden');
         startButtons.classList.remove('hidden');
         saveStatus.classList.add('hidden');
+        postSelectMenu.classList.add('hidden');
         refreshSelectionState();
+      }
+
+      function showPostSelectionMenu() {
+        const panel = document.querySelector('.fifa-panel');
+        const actions = document.querySelector('.selection-actions');
+        if (panel) panel.classList.add('hidden');
+        if (actions) actions.classList.add('hidden');
+        postSelectMenu.classList.remove('hidden');
+        postSelectionIndex = 0;
+        updatePostSelectionVisual();
       }
 
       function startSaveProcedure() {
@@ -953,6 +1067,33 @@
       });
 
       document.addEventListener('keydown', (event) => {
+        if (!postSelectMenu.classList.contains('hidden')) {
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            postSelectionIndex = Math.max(0, postSelectionIndex - 1);
+            updatePostSelectionVisual();
+            return;
+          }
+
+          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+            event.preventDefault();
+            postSelectionIndex = Math.min(4, postSelectionIndex + 1);
+            updatePostSelectionVisual();
+            return;
+          }
+
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            const selectedButton = postSelectChoices[postSelectionIndex];
+            if (selectedButton && selectedButton.dataset.postIndex === '5') {
+              selectCurrentClub();
+              return;
+            }
+            if (selectedButton) selectedButton.click();
+            return;
+          }
+        }
+
         if (startButtons && !startButtons.classList.contains('hidden')) {
           if (event.key === 'ArrowLeft') {
             event.preventDefault();
@@ -1058,6 +1199,7 @@
       refreshArrowButtonState();
       updateActiveSelectionVisual();
       updateMainMenuSelection();
+      updatePostSelectionVisual();
 
       document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
