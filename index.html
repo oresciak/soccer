@@ -373,7 +373,7 @@
         grid-template-rows: repeat(2, minmax(0, 1fr));
         gap: 12px;
         width: 100%;
-        height: 360px;
+        height: 410px;
       }
 
       .post-select-choice {
@@ -388,7 +388,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 12px 8px 10px;
+        padding: 16px 12px 12px;
         cursor: pointer;
       }
 
@@ -399,29 +399,38 @@
       .post-select-choice-main {
         width: 100%;
         text-align: center;
-        font-size: 1.50rem;
+        font-size: 1.72rem;
         font-weight: 900;
         line-height: 1.1;
-        margin-top: 4px;
+        margin-top: 8px;
       }
 
       .post-select-choice-sub {
         width: 100%;
         text-align: center;
-        font-size: 1.10rem;
+        font-size: 1.24rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         opacity: 0.85;
-        margin-top: 70px;
+        margin-top: 0;
+      }
+
+      .post-select-icon-slot {
+        width: 74px;
+        height: 58px;
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        flex: 0 0 58px;
       }
 
       .post-select-option-controls {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 24px;
+        gap: 20px;
         width: 100%;
-        margin-top: 62px;
+        margin-top: auto;
       }
 
       .post-select-option-arrow {
@@ -429,7 +438,7 @@
         padding: 0;
         background: transparent;
         color: #ffffff;
-        font-size: 1.8rem;
+        font-size: 2.1rem;
         line-height: 1;
         font-weight: 900;
       }
@@ -446,7 +455,7 @@
       .post-select-choice.select-choice .post-select-choice-main {
         margin-top: auto;
         margin-bottom: auto;
-        font-size: 1.90rem;
+        font-size: 2.15rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -669,6 +678,7 @@
         <div class="post-select-menu hidden" id="postSelectMenu">
           <div class="post-select-grid">
             <button class="post-select-choice is-active" type="button" data-post-index="0">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">button1</span>
               <span class="post-select-option-controls">
                 <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
@@ -677,6 +687,7 @@
               </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="1">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">button2</span>
               <span class="post-select-option-controls">
                 <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
@@ -685,6 +696,7 @@
               </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="2">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">button3</span>
               <span class="post-select-option-controls">
                 <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
@@ -693,6 +705,7 @@
               </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="3">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">button4</span>
               <span class="post-select-option-controls">
                 <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
@@ -701,6 +714,7 @@
               </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="4">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">button5</span>
               <span class="post-select-option-controls">
                 <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
@@ -709,6 +723,7 @@
               </span>
             </button>
             <button class="post-select-choice select-choice" type="button" data-post-index="5">
+              <span class="post-select-icon-slot" aria-hidden="true"></span>
               <span class="post-select-choice-main">Select</span>
             </button>
           </div>
