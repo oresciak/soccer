@@ -112,7 +112,8 @@
       }
 
       .screen.post-menu-active {
-        width: min(860px, 92vw);
+        width: min(1220px, 94vw);
+        margin: 0 auto;
       }
 
       .selection-title {
@@ -454,10 +455,11 @@
       }
 
       .save-name-screen {
-        width: min(1180px, 94vw);
+        width: 100%;
+        margin: 0 auto;
         background: #0f1116;
         color: #ffffff;
-        padding: 36px;
+        padding: 42px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
@@ -471,14 +473,14 @@
       .save-name-content {
         display: grid;
         grid-template-columns: 1fr 1.4fr;
-        gap: 24px;
+        gap: 28px;
       }
 
       .save-list,
       .save-name-editor {
         background: #191c24;
-        min-height: 510px;
-        padding: 24px;
+        min-height: 540px;
+        padding: 28px;
       }
 
       .save-list-heading {
@@ -897,12 +899,10 @@
                 <button class="screen-key extra-wide" type="button" data-key=" ">SPACE</button>
                 <button class="screen-key extra-wide" id="saveNameConfirm" type="button">Save</button>
               </div>
-
-              <div class="save-name-actions">
-              </div>
             </div>
           </div>
         </div>
+      </div>
 
       <div class="button-row" id="startButtons">
         <div class="main-menu">
@@ -974,10 +974,9 @@
       const saveNameScreen = document.getElementById('saveNameScreen');
       const saveNameInput = document.getElementById('saveNameInput');
       const saveNameConfirm = document.getElementById('saveNameConfirm');
-      const saveNameBack = document.getElementById('saveNameBack');
       const saveLibraryKey = 'football_manager_save_library';
       const virtualKeyboardKeys = Array.from(document.querySelectorAll('.screen-key'));
-      const virtualKeyboardControls = [...virtualKeyboardKeys, saveNameBack, saveNameConfirm];
+      const virtualKeyboardControls = [...virtualKeyboardKeys, saveNameConfirm];
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
@@ -1036,11 +1035,6 @@
       function activateVirtualKeyboardControl() {
         const control = virtualKeyboardControls[virtualKeyboardIndex];
         if (!control) return;
-
-        if (control === saveNameBack) {
-          returnToMainMenu();
-          return;
-        }
 
         if (control === saveNameConfirm) {
           confirmSaveName();
@@ -1506,12 +1500,6 @@
         virtualKeyboardIndex = virtualKeyboardControls.indexOf(saveNameConfirm);
         updateVirtualKeyboardVisual();
         confirmSaveName();
-      });
-
-      saveNameBack.addEventListener('click', () => {
-        virtualKeyboardIndex = virtualKeyboardControls.indexOf(saveNameBack);
-        updateVirtualKeyboardVisual();
-        returnToMainMenu();
       });
 
       document.querySelectorAll('.post-select-option-arrow').forEach((arrow) => {
