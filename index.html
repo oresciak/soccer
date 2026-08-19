@@ -551,6 +551,11 @@
         color: #120d16;
       }
 
+      .screen-key.caps-lock-active {
+        background: #b777d6;
+        color: #120d16;
+      }
+
       .screen-key.wide {
         grid-column: span 2;
       }
@@ -897,7 +902,7 @@
                 <button class="screen-key" type="button" data-key=".">.</button>
                 <button class="screen-key" type="button" data-key="BACKSPACE">x</button>
                 <button class="screen-key extra-wide" type="button" data-key=" ">SPACE</button>
-                <button class="screen-key extra-wide" id="saveNameConfirm" type="button">Save</button>
+                <button class="screen-key extra-wide save-name-confirm" id="saveNameConfirm" type="button">Save</button>
               </div>
             </div>
           </div>
@@ -976,7 +981,7 @@
       const saveNameConfirm = document.getElementById('saveNameConfirm');
       const saveLibraryKey = 'football_manager_save_library';
       const virtualKeyboardKeys = Array.from(document.querySelectorAll('.screen-key'));
-      const virtualKeyboardControls = [...virtualKeyboardKeys, saveNameConfirm];
+      const virtualKeyboardControls = [...virtualKeyboardKeys];
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
@@ -986,6 +991,7 @@
       let postSelectionIndex = 0;
       let savedCareers = [];
       let virtualKeyboardIndex = 0;
+      let capsLockEnabled = false;
 
       let clubSelectionState = {
         countryIndex: 0,
@@ -1030,6 +1036,21 @@
         virtualKeyboardControls.forEach((control, index) => {
           control.classList.toggle('is-active', index === virtualKeyboardIndex);
         });
+        updateVirtualKeyboardLetters();
+      }
+
+      function updateVirtualKeyboardLetters() {
+        virtualKeyboardKeys.forEach((keyButton) => {
+          const key = keyButton.dataset.key;
+          if (!/^[A-Z]$/.test(key)) return;
+          keyButton.textContent = capsLockEnabled ? key : key.toLowerCase();
+        });
+
+        const capsButton = virtualKeyboardKeys.find((keyButton) => keyButton.dataset.key === 'SHIFT');
+        if (capsButton) {
+          capsButton.textContent = capsLockEnabled ? 'CAPS ON' : 'CAPS';
+          capsButton.classList.toggle('caps-lock-active', capsLockEnabled);
+        }
       }
 
       function activateVirtualKeyboardControl() {
@@ -1143,10 +1164,13 @@
           saveNameInput.value = saveNameInput.value.slice(0, -1);
         } else if (key === 'ENTER') {
           confirmSaveName();
-        } else if (key === 'SHIFT' || key === 'CTRL' || key === 'ALT') {
+        } else if (key === 'SHIFT') {
+          capsLockEnabled = !capsLockEnabled;
+          updateVirtualKeyboardVisual();
+        } else if (key === 'CTRL' || key === 'ALT') {
           return;
         } else if (saveNameInput.value.length < saveNameInput.maxLength) {
-          saveNameInput.value += key;
+          saveNameInput.value += /^[A-Z]$/.test(key) && !capsLockEnabled ? key.toLowerCase() : key;
         }
       }
 
@@ -1552,9 +1576,18 @@
             return;
           }
 
+          if (event.key === 'CapsLock') {
+            event.preventDefault();
+            pressScreenKey('SHIFT');
+            return;
+          }
+
           if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
             event.preventDefault();
-            pressScreenKey(event.key.toUpperCase());
+            const key = /^[a-zA-Z]$/.test(event.key)
+              ? (capsLockEnabled ? event.key.toUpperCase() : event.key.toLowerCase())
+              : event.key;
+            pressScreenKey(key);
           }
 
           return;
