@@ -111,6 +111,10 @@
         box-shadow: none;
       }
 
+      .screen.post-menu-active {
+        width: min(860px, 92vw);
+      }
+
       .selection-title {
         display: none;
       }
@@ -369,7 +373,7 @@
         grid-template-rows: repeat(2, minmax(0, 1fr));
         gap: 12px;
         width: 100%;
-        height: 280px;
+        height: 360px;
       }
 
       .post-select-choice {
@@ -767,9 +771,43 @@
         if (!selectedButton) return;
 
         if (selectedButton.classList.contains('select-choice')) {
+          postSelectMenu.classList.add('hidden');
+          gameScreen.classList.remove('post-menu-active');
           saveStatus.textContent = 'Selection confirmed.';
           saveStatus.classList.remove('hidden');
         }
+      }
+
+      const postSelectionOptions = [
+        ['Option 1A', 'Option 1B', 'Option 1C'],
+        ['Option 2A', 'Option 2B', 'Option 2C'],
+        ['Option 3A', 'Option 3B', 'Option 3C'],
+        ['Option 4A', 'Option 4B', 'Option 4C'],
+        ['Option 5A', 'Option 5B', 'Option 5C']
+      ];
+
+      const postSelectionOptionIndexes = [0, 0, 0, 0, 0];
+
+      function updatePostSelectionOption() {
+        postSelectChoices.forEach((button, buttonIndex) => {
+          const options = postSelectionOptions[buttonIndex];
+          const optionIndex = postSelectionOptionIndexes[buttonIndex];
+          const optionLabel = button.querySelector('.post-select-choice-sub');
+
+          if (options && optionLabel) {
+            optionLabel.textContent = options[optionIndex];
+          }
+        });
+      }
+
+      function movePostSelectionOption(direction) {
+        const options = postSelectionOptions[postSelectionIndex];
+        if (!options) return;
+
+        const currentIndex = postSelectionOptionIndexes[postSelectionIndex];
+        postSelectionOptionIndexes[postSelectionIndex] =
+          (currentIndex + direction + options.length) % options.length;
+        updatePostSelectionOption();
       }
 
       function moveMainMenuSelection(direction) {
@@ -1018,6 +1056,7 @@
 
       function activateSelectionScreen() {
         gameScreen.classList.remove('hidden');
+        gameScreen.classList.remove('post-menu-active');
         startButtons.classList.remove('hidden');
         saveStatus.classList.add('hidden');
         postSelectMenu.classList.add('hidden');
@@ -1029,9 +1068,11 @@
         const actions = document.querySelector('.selection-actions');
         if (panel) panel.classList.add('hidden');
         if (actions) actions.classList.add('hidden');
+        gameScreen.classList.add('post-menu-active');
         postSelectMenu.classList.remove('hidden');
         postSelectionIndex = 0;
         updatePostSelectionVisual();
+        updatePostSelectionOption();
       }
 
       function startSaveProcedure() {
@@ -1088,6 +1129,18 @@
 
       document.addEventListener('keydown', (event) => {
         if (!postSelectMenu.classList.contains('hidden')) {
+          if (event.key === '[') {
+            event.preventDefault();
+            movePostSelectionOption(-1);
+            return;
+          }
+
+          if (event.key === ']') {
+            event.preventDefault();
+            movePostSelectionOption(1);
+            return;
+          }
+
           const currentRow = Math.floor(postSelectionIndex / 3);
           const currentColumn = postSelectionIndex % 3;
 
