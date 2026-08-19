@@ -521,7 +521,7 @@
 
       .screen-keyboard {
         display: grid;
-        grid-template-columns: repeat(15, minmax(0, 1fr));
+        grid-template-columns: repeat(10, minmax(0, 1fr));
         gap: 6px;
         margin-top: 18px;
       }
@@ -538,6 +538,13 @@
 
       .screen-key:hover,
       .save-name-confirm:hover {
+        background: #b777d6;
+        color: #120d16;
+      }
+
+      .screen-key.is-active,
+      .save-name-back.is-active,
+      .save-name-confirm.is-active {
         background: #b777d6;
         color: #120d16;
       }
@@ -857,7 +864,6 @@
                 <button class="screen-key" type="button" data-key="8">8</button>
                 <button class="screen-key" type="button" data-key="9">9</button>
                 <button class="screen-key" type="button" data-key="0">0</button>
-                <button class="screen-key wide" type="button" data-key="BACKSPACE">BACKSPACE</button>
                 <button class="screen-key" type="button" data-key="Q">Q</button>
                 <button class="screen-key" type="button" data-key="W">W</button>
                 <button class="screen-key" type="button" data-key="E">E</button>
@@ -868,6 +874,7 @@
                 <button class="screen-key" type="button" data-key="I">I</button>
                 <button class="screen-key" type="button" data-key="O">O</button>
                 <button class="screen-key" type="button" data-key="P">P</button>
+                <button class="screen-key" type="button" data-key="SHIFT">^</button>
                 <button class="screen-key" type="button" data-key="A">A</button>
                 <button class="screen-key" type="button" data-key="S">S</button>
                 <button class="screen-key" type="button" data-key="D">D</button>
@@ -877,8 +884,6 @@
                 <button class="screen-key" type="button" data-key="J">J</button>
                 <button class="screen-key" type="button" data-key="K">K</button>
                 <button class="screen-key" type="button" data-key="L">L</button>
-                <button class="screen-key" type="button" data-key="ENTER">ENTER</button>
-                <button class="screen-key wide" type="button" data-key="SHIFT">SHIFT</button>
                 <button class="screen-key" type="button" data-key="Z">Z</button>
                 <button class="screen-key" type="button" data-key="X">X</button>
                 <button class="screen-key" type="button" data-key="C">C</button>
@@ -888,9 +893,9 @@
                 <button class="screen-key" type="button" data-key="M">M</button>
                 <button class="screen-key" type="button" data-key=",">,</button>
                 <button class="screen-key" type="button" data-key=".">.</button>
-                <button class="screen-key" type="button" data-key="/">/</button>
-                <button class="screen-key wide" type="button" data-key="SHIFT">SHIFT</button>
+                <button class="screen-key" type="button" data-key="BACKSPACE">x</button>
                 <button class="screen-key extra-wide" type="button" data-key=" ">SPACE</button>
+                <button class="screen-key extra-wide" id="saveNameConfirm" type="button">Save</button>
               </div>
               <div class="save-name-actions">
                 <button class="save-name-back" id="saveNameBack" type="button">Back</button>
@@ -973,6 +978,8 @@
       const saveNameConfirm = document.getElementById('saveNameConfirm');
       const saveNameBack = document.getElementById('saveNameBack');
       const saveLibraryKey = 'football_manager_save_library';
+      const virtualKeyboardKeys = Array.from(document.querySelectorAll('.screen-key'));
+      const virtualKeyboardControls = [...virtualKeyboardKeys, saveNameBack, saveNameConfirm];
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
@@ -981,6 +988,7 @@
       let mainMenuSelectionIndex = 0;
       let postSelectionIndex = 0;
       let savedCareers = [];
+      let virtualKeyboardIndex = 0;
 
       let clubSelectionState = {
         countryIndex: 0,
@@ -1016,8 +1024,68 @@
         gameScreen.classList.add('post-menu-active');
         topDate.classList.add('hidden');
         saveNameScreen.classList.remove('hidden');
-        saveNameInput.focus();
-        saveNameInput.select();
+        saveNameInput.value = '';
+        virtualKeyboardIndex = 0;
+        updateVirtualKeyboardVisual();
+      }
+
+      function updateVirtualKeyboardVisual() {
+        virtualKeyboardControls.forEach((control, index) => {
+          control.classList.toggle('is-active', index === virtualKeyboardIndex);
+        });
+      }
+
+      function activateVirtualKeyboardControl() {
+        const control = virtualKeyboardControls[virtualKeyboardIndex];
+        if (!control) return;
+
+        if (control === saveNameBack) {
+          returnToMainMenu();
+          return;
+        }
+
+        if (control === saveNameConfirm) {
+          confirmSaveName();
+          return;
+        }
+
+        pressScreenKey(control.dataset.key);
+      }
+
+      function moveVirtualKeyboard(direction) {
+        const current = virtualKeyboardControls[virtualKeyboardIndex];
+        if (!current) return;
+
+        const currentRect = current.getBoundingClientRect();
+        const currentX = currentRect.left + currentRect.width / 2;
+        const currentY = currentRect.top + currentRect.height / 2;
+        const isHorizontal = direction === 'left' || direction === 'right';
+        const candidates = virtualKeyboardControls
+          .map((control, index) => ({ control, index, rect: control.getBoundingClientRect() }))
+          .filter(({ index, rect }) => {
+            if (index === virtualKeyboardIndex) return false;
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const isActionControl = index >= virtualKeyboardKeys.length;
+            if (isHorizontal && Math.abs(centerY - currentY) > currentRect.height * 1.5) return false;
+            if (!isHorizontal && Math.abs(centerX - currentX) > currentRect.width * 1.8 && !(direction === 'down' && !isActionControl)) return false;
+            if (direction === 'left') return centerX < currentX;
+            if (direction === 'right') return centerX > currentX;
+            if (direction === 'up') return centerY < currentY;
+            return centerY > currentY;
+          })
+          .sort(({ rect: first }, { rect: second }) => {
+            const firstX = first.left + first.width / 2;
+            const firstY = first.top + first.height / 2;
+            const secondX = second.left + second.width / 2;
+            const secondY = second.top + second.height / 2;
+            return Math.hypot(firstX - currentX, firstY - currentY) - Math.hypot(secondX - currentX, secondY - currentY);
+          });
+
+        if (candidates[0]) {
+          virtualKeyboardIndex = candidates[0].index;
+          updateVirtualKeyboardVisual();
+        }
       }
 
       function returnToMainMenu() {
@@ -1079,8 +1147,6 @@
       }
 
       function pressScreenKey(key) {
-        saveNameInput.focus();
-
         if (key === 'BACKSPACE') {
           saveNameInput.value = saveNameInput.value.slice(0, -1);
         } else if (key === 'ENTER') {
@@ -1432,12 +1498,23 @@
 
       document.querySelectorAll('.screen-key').forEach((button) => {
         button.addEventListener('click', () => {
+          virtualKeyboardIndex = virtualKeyboardControls.indexOf(button);
+          updateVirtualKeyboardVisual();
           pressScreenKey(button.dataset.key);
         });
       });
 
-      saveNameConfirm.addEventListener('click', confirmSaveName);
-      saveNameBack.addEventListener('click', returnToMainMenu);
+      saveNameConfirm.addEventListener('click', () => {
+        virtualKeyboardIndex = virtualKeyboardControls.indexOf(saveNameConfirm);
+        updateVirtualKeyboardVisual();
+        confirmSaveName();
+      });
+
+      saveNameBack.addEventListener('click', () => {
+        virtualKeyboardIndex = virtualKeyboardControls.indexOf(saveNameBack);
+        updateVirtualKeyboardVisual();
+        returnToMainMenu();
+      });
 
       document.querySelectorAll('.post-select-option-arrow').forEach((arrow) => {
         arrow.addEventListener('click', (event) => {
@@ -1465,9 +1542,15 @@
 
       document.addEventListener('keydown', (event) => {
         if (!saveNameScreen.classList.contains('hidden')) {
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault();
+            moveVirtualKeyboard(event.key.slice(5).toLowerCase());
+            return;
+          }
+
           if (event.key === 'Enter') {
             event.preventDefault();
-            confirmSaveName();
+            activateVirtualKeyboardControl();
             return;
           }
 
@@ -1480,6 +1563,12 @@
           if (event.key === 'Backspace') {
             event.preventDefault();
             pressScreenKey('BACKSPACE');
+            return;
+          }
+
+          if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+            event.preventDefault();
+            pressScreenKey(event.key.toUpperCase());
           }
 
           return;
