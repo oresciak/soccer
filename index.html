@@ -364,15 +364,17 @@
       }
 
       .post-select-grid {
-        display: flex;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
         gap: 12px;
         width: 100%;
+        height: 280px;
       }
 
       .post-select-choice {
-        flex: 1;
-        min-height: 134px;
+        min-width: 0;
+        min-height: 0;
         background: rgba(15, 17, 22, 0.98);
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -410,7 +412,7 @@
       }
 
       .post-select-choice.select-choice {
-        min-width: 150px;
+        min-width: 0;
       }
 
       .post-select-choice.select-choice .post-select-choice-main {
@@ -760,6 +762,16 @@
         });
       }
 
+      function activatePostSelection() {
+        const selectedButton = postSelectChoices[postSelectionIndex];
+        if (!selectedButton) return;
+
+        if (selectedButton.classList.contains('select-choice')) {
+          saveStatus.textContent = 'Selection confirmed.';
+          saveStatus.classList.remove('hidden');
+        }
+      }
+
       function moveMainMenuSelection(direction) {
         if (direction < 0) {
           mainMenuSelectionIndex = 0;
@@ -1054,6 +1066,14 @@
         updateActiveSelectionVisual();
       });
 
+      postSelectChoices.forEach((button, index) => {
+        button.addEventListener('click', () => {
+          postSelectionIndex = index;
+          updatePostSelectionVisual();
+          activatePostSelection();
+        });
+      });
+
       startSaveBtn.addEventListener('click', startSaveProcedure);
 
       mainMenuButtons.forEach((button, index) => {
@@ -1068,28 +1088,40 @@
 
       document.addEventListener('keydown', (event) => {
         if (!postSelectMenu.classList.contains('hidden')) {
-          if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          const currentRow = Math.floor(postSelectionIndex / 3);
+          const currentColumn = postSelectionIndex % 3;
+
+          if (event.key === 'ArrowLeft' && currentColumn > 0) {
             event.preventDefault();
-            postSelectionIndex = Math.max(0, postSelectionIndex - 1);
+            postSelectionIndex -= 1;
             updatePostSelectionVisual();
             return;
           }
 
-          if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+          if (event.key === 'ArrowRight' && currentColumn < 2) {
             event.preventDefault();
-            postSelectionIndex = Math.min(4, postSelectionIndex + 1);
+            postSelectionIndex += 1;
+            updatePostSelectionVisual();
+            return;
+          }
+
+          if (event.key === 'ArrowUp' && currentRow > 0) {
+            event.preventDefault();
+            postSelectionIndex -= 3;
+            updatePostSelectionVisual();
+            return;
+          }
+
+          if (event.key === 'ArrowDown' && currentRow < 1) {
+            event.preventDefault();
+            postSelectionIndex += 3;
             updatePostSelectionVisual();
             return;
           }
 
           if (event.key === 'Enter') {
             event.preventDefault();
-            const selectedButton = postSelectChoices[postSelectionIndex];
-            if (selectedButton && selectedButton.dataset.postIndex === '5') {
-              selectCurrentClub();
-              return;
-            }
-            if (selectedButton) selectedButton.click();
+            activatePostSelection();
             return;
           }
         }
