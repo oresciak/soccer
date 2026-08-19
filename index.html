@@ -415,6 +415,30 @@
         margin-top: 70px;
       }
 
+      .post-select-option-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        width: 100%;
+        margin-top: 62px;
+      }
+
+      .post-select-option-arrow {
+        min-width: 0;
+        padding: 0;
+        background: transparent;
+        color: #ffffff;
+        font-size: 1.8rem;
+        line-height: 1;
+        font-weight: 900;
+      }
+
+      .post-select-option-controls .post-select-choice-sub {
+        width: auto;
+        margin-top: 0;
+      }
+
       .post-select-choice.select-choice {
         min-width: 0;
       }
@@ -646,23 +670,43 @@
           <div class="post-select-grid">
             <button class="post-select-choice is-active" type="button" data-post-index="0">
               <span class="post-select-choice-main">button1</span>
-              <span class="post-select-choice-sub">sub</span>
+              <span class="post-select-option-controls">
+                <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
+                <span class="post-select-choice-sub">sub</span>
+                <span class="post-select-option-arrow" data-option-direction="1">▶</span>
+              </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="1">
               <span class="post-select-choice-main">button2</span>
-              <span class="post-select-choice-sub">sub</span>
+              <span class="post-select-option-controls">
+                <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
+                <span class="post-select-choice-sub">sub</span>
+                <span class="post-select-option-arrow" data-option-direction="1">▶</span>
+              </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="2">
               <span class="post-select-choice-main">button3</span>
-              <span class="post-select-choice-sub">sub</span>
+              <span class="post-select-option-controls">
+                <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
+                <span class="post-select-choice-sub">sub</span>
+                <span class="post-select-option-arrow" data-option-direction="1">▶</span>
+              </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="3">
               <span class="post-select-choice-main">button4</span>
-              <span class="post-select-choice-sub">sub</span>
+              <span class="post-select-option-controls">
+                <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
+                <span class="post-select-choice-sub">sub</span>
+                <span class="post-select-option-arrow" data-option-direction="1">▶</span>
+              </span>
             </button>
             <button class="post-select-choice" type="button" data-post-index="4">
               <span class="post-select-choice-main">button5</span>
-              <span class="post-select-choice-sub">sub</span>
+              <span class="post-select-option-controls">
+                <span class="post-select-option-arrow" data-option-direction="-1">◀</span>
+                <span class="post-select-choice-sub">sub</span>
+                <span class="post-select-option-arrow" data-option-direction="1">▶</span>
+              </span>
             </button>
             <button class="post-select-choice select-choice" type="button" data-post-index="5">
               <span class="post-select-choice-main">Select</span>
@@ -1112,6 +1156,18 @@
           postSelectionIndex = index;
           updatePostSelectionVisual();
           activatePostSelection();
+        });
+      });
+
+      document.querySelectorAll('.post-select-option-arrow').forEach((arrow) => {
+        arrow.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const choice = arrow.closest('.post-select-choice');
+          if (!choice) return;
+
+          postSelectionIndex = Number(choice.dataset.postIndex);
+          updatePostSelectionVisual();
+          movePostSelectionOption(Number(arrow.dataset.optionDirection));
         });
       });
 
