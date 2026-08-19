@@ -454,10 +454,10 @@
       }
 
       .save-name-screen {
-        width: min(980px, 92vw);
+        width: min(1180px, 94vw);
         background: #0f1116;
         color: #ffffff;
-        padding: 28px;
+        padding: 36px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
@@ -477,8 +477,8 @@
       .save-list,
       .save-name-editor {
         background: #191c24;
-        min-height: 360px;
-        padding: 18px;
+        min-height: 510px;
+        padding: 24px;
       }
 
       .save-list-heading {
@@ -521,7 +521,7 @@
 
       .screen-keyboard {
         display: grid;
-        grid-template-columns: repeat(10, minmax(0, 1fr));
+        grid-template-columns: repeat(15, minmax(0, 1fr));
         gap: 6px;
         margin-top: 18px;
       }
@@ -544,6 +544,10 @@
 
       .screen-key.wide {
         grid-column: span 2;
+      }
+
+      .screen-key.extra-wide {
+        grid-column: span 3;
       }
 
       .save-name-actions {
@@ -853,6 +857,7 @@
                 <button class="screen-key" type="button" data-key="8">8</button>
                 <button class="screen-key" type="button" data-key="9">9</button>
                 <button class="screen-key" type="button" data-key="0">0</button>
+                <button class="screen-key wide" type="button" data-key="BACKSPACE">BACKSPACE</button>
                 <button class="screen-key" type="button" data-key="Q">Q</button>
                 <button class="screen-key" type="button" data-key="W">W</button>
                 <button class="screen-key" type="button" data-key="E">E</button>
@@ -872,8 +877,20 @@
                 <button class="screen-key" type="button" data-key="J">J</button>
                 <button class="screen-key" type="button" data-key="K">K</button>
                 <button class="screen-key" type="button" data-key="L">L</button>
-                <button class="screen-key" type="button" data-key="BACKSPACE">BACK</button>
-                <button class="screen-key wide" type="button" data-key=" ">SPACE</button>
+                <button class="screen-key" type="button" data-key="ENTER">ENTER</button>
+                <button class="screen-key wide" type="button" data-key="SHIFT">SHIFT</button>
+                <button class="screen-key" type="button" data-key="Z">Z</button>
+                <button class="screen-key" type="button" data-key="X">X</button>
+                <button class="screen-key" type="button" data-key="C">C</button>
+                <button class="screen-key" type="button" data-key="V">V</button>
+                <button class="screen-key" type="button" data-key="B">B</button>
+                <button class="screen-key" type="button" data-key="N">N</button>
+                <button class="screen-key" type="button" data-key="M">M</button>
+                <button class="screen-key" type="button" data-key=",">,</button>
+                <button class="screen-key" type="button" data-key=".">.</button>
+                <button class="screen-key" type="button" data-key="/">/</button>
+                <button class="screen-key wide" type="button" data-key="SHIFT">SHIFT</button>
+                <button class="screen-key extra-wide" type="button" data-key=" ">SPACE</button>
               </div>
               <div class="save-name-actions">
                 <button class="save-name-back" id="saveNameBack" type="button">Back</button>
@@ -955,6 +972,7 @@
       const saveNameInput = document.getElementById('saveNameInput');
       const saveNameConfirm = document.getElementById('saveNameConfirm');
       const saveNameBack = document.getElementById('saveNameBack');
+      const saveLibraryKey = 'football_manager_save_library';
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
@@ -962,6 +980,7 @@
 
       let mainMenuSelectionIndex = 0;
       let postSelectionIndex = 0;
+      let savedCareers = [];
 
       let clubSelectionState = {
         countryIndex: 0,
@@ -995,22 +1014,64 @@
 
       function showSaveNameScreen() {
         gameScreen.classList.add('post-menu-active');
+        topDate.classList.add('hidden');
         saveNameScreen.classList.remove('hidden');
         saveNameInput.focus();
         saveNameInput.select();
       }
 
-      function hideSaveNameScreen() {
+      function returnToMainMenu() {
         saveNameScreen.classList.add('hidden');
+        postSelectMenu.classList.add('hidden');
+        gameScreen.classList.add('hidden');
         gameScreen.classList.remove('post-menu-active');
-        postSelectMenu.classList.remove('hidden');
-        updatePostSelectionVisual();
+        startButtons.classList.remove('hidden');
+        topDate.classList.add('hidden');
+        saveStatus.classList.add('hidden');
+        updateMainMenuSelection();
+      }
+
+      function loadSavedCareers() {
+        try {
+          savedCareers = JSON.parse(localStorage.getItem(saveLibraryKey) || '[]');
+        } catch (error) {
+          savedCareers = [];
+        }
+
+        if (!savedCareers.length) {
+          const legacySave = localStorage.getItem('save_game_1');
+          if (legacySave) {
+            try {
+              savedCareers = [{ name: 'save_game_1', save: JSON.parse(legacySave) }];
+              localStorage.setItem(saveLibraryKey, JSON.stringify(savedCareers));
+            } catch (error) {
+              savedCareers = [];
+            }
+          }
+        }
+      }
+
+      function persistSave(save, displayName) {
+        savedCareers = savedCareers.filter((entry) => entry.name !== displayName);
+        savedCareers.unshift({ name: displayName, save });
+        localStorage.setItem(saveLibraryKey, JSON.stringify(savedCareers));
+        renderSavedCareers();
+      }
+
+      function renderSavedCareers() {
+        const slots = Array.from(document.querySelectorAll('.save-slot'));
+        slots.forEach((slot, index) => {
+          const save = savedCareers[index];
+          slot.textContent = save ? `${index + 1}  ${save.name}` : `${index + 1}  Empty slot`;
+          slot.classList.toggle('is-active', index === 0);
+        });
       }
 
       function confirmSaveName() {
         const name = saveNameInput.value.trim() || 'New career';
         gameState.saveName = name.replace(/[^a-zA-Z0-9_-]/g, '_');
-        createSave();
+        const save = createSave();
+        persistSave(save, name);
         saveStatus.textContent = `Saved: ${name}`;
         saveStatus.classList.remove('hidden');
         saveNameScreen.classList.add('hidden');
@@ -1022,6 +1083,10 @@
 
         if (key === 'BACKSPACE') {
           saveNameInput.value = saveNameInput.value.slice(0, -1);
+        } else if (key === 'ENTER') {
+          confirmSaveName();
+        } else if (key === 'SHIFT' || key === 'CTRL' || key === 'ALT') {
+          return;
         } else if (saveNameInput.value.length < saveNameInput.maxLength) {
           saveNameInput.value += key;
         }
@@ -1372,7 +1437,7 @@
       });
 
       saveNameConfirm.addEventListener('click', confirmSaveName);
-      saveNameBack.addEventListener('click', hideSaveNameScreen);
+      saveNameBack.addEventListener('click', returnToMainMenu);
 
       document.querySelectorAll('.post-select-option-arrow').forEach((arrow) => {
         arrow.addEventListener('click', (event) => {
@@ -1408,7 +1473,7 @@
 
           if (event.key === 'Escape') {
             event.preventDefault();
-            hideSaveNameScreen();
+            returnToMainMenu();
             return;
           }
 
@@ -1572,6 +1637,8 @@
 
       updateDateHeader();
       topDate.classList.add('hidden');
+      loadSavedCareers();
+      renderSavedCareers();
       refreshSelectionState();
       refreshArrowButtonState();
       updateActiveSelectionVisual();
