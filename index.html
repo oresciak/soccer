@@ -453,6 +453,122 @@
         height: 100%;
       }
 
+      .save-name-screen {
+        width: min(980px, 92vw);
+        background: #0f1116;
+        color: #ffffff;
+        padding: 28px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .save-name-title {
+        margin: 0 0 22px;
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .save-name-content {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 24px;
+      }
+
+      .save-list,
+      .save-name-editor {
+        background: #191c24;
+        min-height: 360px;
+        padding: 18px;
+      }
+
+      .save-list-heading {
+        margin: 0 0 14px;
+        color: #d6a7ea;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .save-slot {
+        width: 100%;
+        min-height: 70px;
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        background: #252934;
+        color: #ffffff;
+        text-align: left;
+        font-size: 1rem;
+        font-weight: 800;
+      }
+
+      .save-slot.is-active {
+        background: #b777d6;
+        color: #120d16;
+      }
+
+      .save-name-input {
+        width: 100%;
+        height: 58px;
+        border: none;
+        outline: none;
+        padding: 0 16px;
+        background: #0f1116;
+        color: #ffffff;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+
+      .screen-keyboard {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 18px;
+      }
+
+      .screen-key {
+        min-width: 0;
+        height: 42px;
+        padding: 0;
+        background: #252934;
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 800;
+      }
+
+      .screen-key:hover,
+      .save-name-confirm:hover {
+        background: #b777d6;
+        color: #120d16;
+      }
+
+      .screen-key.wide {
+        grid-column: span 2;
+      }
+
+      .save-name-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .save-name-confirm,
+      .save-name-back {
+        flex: 1;
+        height: 54px;
+        padding: 0;
+        background: #b777d6;
+        color: #120d16;
+        font-size: 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .save-name-back {
+        background: #252934;
+        color: #ffffff;
+      }
+
       .button-row {
         display: flex;
         justify-content: center;
@@ -713,6 +829,59 @@
             </button>
           </div>
         </div>
+
+        <div class="save-name-screen hidden" id="saveNameScreen">
+          <h2 class="save-name-title">Save</h2>
+          <div class="save-name-content">
+            <div class="save-list">
+              <h3 class="save-list-heading">Career saves</h3>
+              <button class="save-slot is-active" type="button">1&nbsp;&nbsp; New career</button>
+              <button class="save-slot" type="button">2&nbsp;&nbsp; Empty slot</button>
+              <button class="save-slot" type="button">3&nbsp;&nbsp; Empty slot</button>
+            </div>
+            <div class="save-name-editor">
+              <h3 class="save-list-heading">Save name</h3>
+              <input class="save-name-input" id="saveNameInput" type="text" maxlength="24" value="New career" autocomplete="off" />
+              <div class="screen-keyboard" id="screenKeyboard">
+                <button class="screen-key" type="button" data-key="1">1</button>
+                <button class="screen-key" type="button" data-key="2">2</button>
+                <button class="screen-key" type="button" data-key="3">3</button>
+                <button class="screen-key" type="button" data-key="4">4</button>
+                <button class="screen-key" type="button" data-key="5">5</button>
+                <button class="screen-key" type="button" data-key="6">6</button>
+                <button class="screen-key" type="button" data-key="7">7</button>
+                <button class="screen-key" type="button" data-key="8">8</button>
+                <button class="screen-key" type="button" data-key="9">9</button>
+                <button class="screen-key" type="button" data-key="0">0</button>
+                <button class="screen-key" type="button" data-key="Q">Q</button>
+                <button class="screen-key" type="button" data-key="W">W</button>
+                <button class="screen-key" type="button" data-key="E">E</button>
+                <button class="screen-key" type="button" data-key="R">R</button>
+                <button class="screen-key" type="button" data-key="T">T</button>
+                <button class="screen-key" type="button" data-key="Y">Y</button>
+                <button class="screen-key" type="button" data-key="U">U</button>
+                <button class="screen-key" type="button" data-key="I">I</button>
+                <button class="screen-key" type="button" data-key="O">O</button>
+                <button class="screen-key" type="button" data-key="P">P</button>
+                <button class="screen-key" type="button" data-key="A">A</button>
+                <button class="screen-key" type="button" data-key="S">S</button>
+                <button class="screen-key" type="button" data-key="D">D</button>
+                <button class="screen-key" type="button" data-key="F">F</button>
+                <button class="screen-key" type="button" data-key="G">G</button>
+                <button class="screen-key" type="button" data-key="H">H</button>
+                <button class="screen-key" type="button" data-key="J">J</button>
+                <button class="screen-key" type="button" data-key="K">K</button>
+                <button class="screen-key" type="button" data-key="L">L</button>
+                <button class="screen-key" type="button" data-key="BACKSPACE">BACK</button>
+                <button class="screen-key wide" type="button" data-key=" ">SPACE</button>
+              </div>
+              <div class="save-name-actions">
+                <button class="save-name-back" id="saveNameBack" type="button">Back</button>
+                <button class="save-name-confirm" id="saveNameConfirm" type="button">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="button-row" id="startButtons">
@@ -782,6 +951,10 @@
       const gameScreen = document.getElementById('gameScreen');
       const postSelectMenu = document.getElementById('postSelectMenu');
       const postSelectChoices = Array.from(document.querySelectorAll('.post-select-choice'));
+      const saveNameScreen = document.getElementById('saveNameScreen');
+      const saveNameInput = document.getElementById('saveNameInput');
+      const saveNameConfirm = document.getElementById('saveNameConfirm');
+      const saveNameBack = document.getElementById('saveNameBack');
       const mainMenuButtons = [
         document.getElementById('startSaveBtn'),
         ...document.querySelectorAll('.menu-panel')
@@ -816,9 +989,41 @@
 
         if (selectedButton.classList.contains('select-choice')) {
           postSelectMenu.classList.add('hidden');
-          gameScreen.classList.remove('post-menu-active');
-          saveStatus.textContent = 'Selection confirmed.';
-          saveStatus.classList.remove('hidden');
+          showSaveNameScreen();
+        }
+      }
+
+      function showSaveNameScreen() {
+        gameScreen.classList.add('post-menu-active');
+        saveNameScreen.classList.remove('hidden');
+        saveNameInput.focus();
+        saveNameInput.select();
+      }
+
+      function hideSaveNameScreen() {
+        saveNameScreen.classList.add('hidden');
+        gameScreen.classList.remove('post-menu-active');
+        postSelectMenu.classList.remove('hidden');
+        updatePostSelectionVisual();
+      }
+
+      function confirmSaveName() {
+        const name = saveNameInput.value.trim() || 'New career';
+        gameState.saveName = name.replace(/[^a-zA-Z0-9_-]/g, '_');
+        createSave();
+        saveStatus.textContent = `Saved: ${name}`;
+        saveStatus.classList.remove('hidden');
+        saveNameScreen.classList.add('hidden');
+        gameScreen.classList.remove('post-menu-active');
+      }
+
+      function pressScreenKey(key) {
+        saveNameInput.focus();
+
+        if (key === 'BACKSPACE') {
+          saveNameInput.value = saveNameInput.value.slice(0, -1);
+        } else if (saveNameInput.value.length < saveNameInput.maxLength) {
+          saveNameInput.value += key;
         }
       }
 
@@ -1104,6 +1309,7 @@
         startButtons.classList.remove('hidden');
         saveStatus.classList.add('hidden');
         postSelectMenu.classList.add('hidden');
+        saveNameScreen.classList.add('hidden');
         refreshSelectionState();
       }
 
@@ -1159,6 +1365,15 @@
         });
       });
 
+      document.querySelectorAll('.screen-key').forEach((button) => {
+        button.addEventListener('click', () => {
+          pressScreenKey(button.dataset.key);
+        });
+      });
+
+      saveNameConfirm.addEventListener('click', confirmSaveName);
+      saveNameBack.addEventListener('click', hideSaveNameScreen);
+
       document.querySelectorAll('.post-select-option-arrow').forEach((arrow) => {
         arrow.addEventListener('click', (event) => {
           event.stopPropagation();
@@ -1184,6 +1399,27 @@
       });
 
       document.addEventListener('keydown', (event) => {
+        if (!saveNameScreen.classList.contains('hidden')) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            confirmSaveName();
+            return;
+          }
+
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            hideSaveNameScreen();
+            return;
+          }
+
+          if (event.key === 'Backspace') {
+            event.preventDefault();
+            pressScreenKey('BACKSPACE');
+          }
+
+          return;
+        }
+
         if (!postSelectMenu.classList.contains('hidden')) {
           if (event.key === '[') {
             event.preventDefault();
